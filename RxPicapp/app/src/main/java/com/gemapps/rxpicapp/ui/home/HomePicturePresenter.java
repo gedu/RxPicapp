@@ -1,7 +1,5 @@
 package com.gemapps.rxpicapp.ui.home;
 
-import android.util.Log;
-
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.model.Picture;
 
@@ -45,49 +43,25 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
     public void loadPictures(){
         mSubscriptions.clear();
         Disposable subscription = mRepository.getPictures()
-                .subscribeWith(new DisposableObserver<List<Picture>>() {
-                    @Override
-                    public void onNext(List<Picture> pictures) {
-                        for (Picture picture : pictures) {
-                            Log.d(TAG, "accept: "+picture.getTitle());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribeWith(listenForPictures());
 
         mSubscriptions.add(subscription);
     }
 
-    /*
-    *
-     new Consumer<List<Picture>>() {
-                    @Override
-                    public void accept(List<Picture> pictures) throws Exception {
+    private DisposableObserver<List<Picture>> listenForPictures() {
+        return new DisposableObserver<List<Picture>>() {
+            @Override
+            public void onNext(List<Picture> pictures) {
+                
+                mView.addPictures(pictures);
+                mView.hideProgress();
+            }
 
-                        for (Picture picture : pictures) {
-                            Log.d(TAG, "accept: "+picture.getTitle());
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
+            @Override
+            public void onError(Throwable e) {}
 
-                    }
-                }, new Action() {
-                    @Override
-                    public void run() throws Exception {
-
-                    }
-                }
-    * */
-
+            @Override
+            public void onComplete() {}
+        };
+    }
 }

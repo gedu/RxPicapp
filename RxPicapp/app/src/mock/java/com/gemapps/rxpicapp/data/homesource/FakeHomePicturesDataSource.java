@@ -25,7 +25,6 @@ public class FakeHomePicturesDataSource implements HomePictureDataSource {
 
     @Override
     public Observable<List<Picture>> getPictures() {
-
         return Observable.fromCallable(readPictures())
                 .subscribeOn(Schedulers.io())
                 .map(getPicturesFromResult())
