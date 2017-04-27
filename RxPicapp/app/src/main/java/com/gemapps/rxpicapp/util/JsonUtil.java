@@ -1,6 +1,5 @@
 package com.gemapps.rxpicapp.util;
 
-import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.networking.deserializer.PictureDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,8 +15,8 @@ import java.io.InputStreamReader;
 
 public class JsonUtil {
 
-    public static Gson PICTURE_DESERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(Picture.class, new PictureDeserializer())
+    public static final Gson PICTURE_DESERIALIZER = new GsonBuilder()
+            .registerTypeAdapter(PictureDeserializer.ResultValue.class, new PictureDeserializer())
             .create();
 
     public static String loadJsonFromResources(ClassLoader loader, String jsonName ){

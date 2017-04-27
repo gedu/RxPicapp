@@ -18,6 +18,8 @@ import java.util.List;
 
 public class PictureDeserializer implements JsonDeserializer<PictureDeserializer.ResultValue> {
 
+    private static final String TAG = "PictureDeserializer";
+
     @Override
     public ResultValue deserialize(JsonElement jsonElement, Type type,
                                JsonDeserializationContext jsonDeserializationContext)

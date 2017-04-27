@@ -6,5 +6,6 @@ package com.gemapps.rxpicapp.ui;
 
 public interface BasePresenter {
 
-    void start();
+    void subscribe();
+    void unSubscribe();
 }

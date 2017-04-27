@@ -16,5 +16,6 @@ public interface HomePictureContract {
 
     interface Presenter extends BasePresenter {
 
+        void loadPictures();
     }
 }

@@ -3,6 +3,8 @@ package com.gemapps.rxpicapp.ui.home;
 import android.os.Bundle;
 
 import com.gemapps.rxpicapp.R;
+import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
+import com.gemapps.rxpicapp.networking.NetInjector;
 import com.gemapps.rxpicapp.ui.butter.ButterActivity;
 
 public class HomePicturesActivity extends ButterActivity {
@@ -33,7 +35,8 @@ public class HomePicturesActivity extends ButterActivity {
     }
 
     private void setupPresenter(HomePictureFragment homeFragment) {
-        mPresenter = new HomePicturePresenter(homeFragment);
+        mPresenter = new HomePicturePresenter(homeFragment,
+                new HomePictureRepository(NetInjector.getHomePictureRequester()));
     }
 
 

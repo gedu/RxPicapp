@@ -1,5 +1,7 @@
 package com.gemapps.rxpicapp.ui.home;
 
+import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +19,14 @@ public class HomePicturePresenterTest {
     @Mock
     private HomePictureContract.View mView;
 
+    @Mock
+    private HomePictureRepository mRepository;
+
     private HomePicturePresenter mPresenter;
 
     @Before
     public void setup(){
-        mPresenter = new HomePicturePresenter(mView);
+        mPresenter = new HomePicturePresenter(mView, mRepository);
     }
 
     @Test
@@ -31,7 +36,7 @@ public class HomePicturePresenterTest {
 
     @Test
     public void showProgressBarAtStart(){
-        mPresenter.start();
+        mPresenter.subscribe();
         verify(mView).showProgressBar();
     }
 }

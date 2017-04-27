@@ -21,6 +21,8 @@ public class HomePictureFragment extends ButterFragment implements HomePictureCo
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+    private HomePictureContract.Presenter mPresenter;
+
     public HomePictureFragment() {
         // Required empty public constructor
     }
@@ -38,7 +40,13 @@ public class HomePictureFragment extends ButterFragment implements HomePictureCo
 
     @Override
     public void setPresenter(HomePictureContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.loadPictures();
     }
 
     @Override
