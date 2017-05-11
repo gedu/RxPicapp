@@ -1,7 +1,6 @@
 package com.gemapps.rxpicapp.ui.home;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.ButterViewHolder;
+import com.gemapps.rxpicapp.ui.widget.BaseRecyclerViewAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,8 +21,8 @@ import butterknife.BindView;
  * Created by edu on 4/27/17.
  */
 public class HomePictureViewAdapter
-        extends RecyclerView.Adapter<HomePictureViewAdapter.HomePictureViewHolder> {
-
+        extends BaseRecyclerViewAdapter<HomePictureViewAdapter.HomePictureViewHolder> {
+    private static final String TAG = "HomePictureViewAdapter";
     private final Context mContext;
     private List<Picture> mItems;
 
@@ -44,6 +44,7 @@ public class HomePictureViewAdapter
         Picture item = mItems.get(position);
 
         holder.mAuthorName.setText(item.getOwnerName());
+        holder.mPicTitle.setText(item.getTitle());
         Picasso.with(mContext).load(item.getUrl()).into(holder.mPicImage);
     }
 
@@ -62,6 +63,9 @@ public class HomePictureViewAdapter
 
         @BindView(R.id.author_name)
         TextView mAuthorName;
+
+        @BindView(R.id.pic_title_text)
+        TextView mPicTitle;
 
         @BindView(R.id.pic_image)
         ImageView mPicImage;

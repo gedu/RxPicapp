@@ -32,12 +32,9 @@ public class FakeHomePicturesDataSource implements HomePictureDataSource {
     }
 
     private Callable<PictureDeserializer.ResultValue> readPictures() {
-        return new Callable<PictureDeserializer.ResultValue>() {
-            @Override
-            public PictureDeserializer.ResultValue call() throws Exception {
-                String pictureJson = loadPicturesFromFile();
-                return parse(pictureJson);
-            }
+        return () -> {
+            String pictureJson = loadPicturesFromFile();
+            return parse(pictureJson);
         };
     }
 
@@ -52,11 +49,6 @@ public class FakeHomePicturesDataSource implements HomePictureDataSource {
     }
 
     private Function<PictureDeserializer.ResultValue, List<Picture>> getPicturesFromResult() {
-        return new Function<PictureDeserializer.ResultValue, List<Picture>>() {
-            @Override
-            public List<Picture> apply(PictureDeserializer.ResultValue result) throws Exception {
-                return result.getPictures();
-            }
-        };
+        return PictureDeserializer.ResultValue::getPictures;
     }
 }

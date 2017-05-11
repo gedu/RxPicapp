@@ -1,5 +1,7 @@
 package com.gemapps.rxpicapp.networking.deserializer;
 
+import android.util.Log;
+
 import com.gemapps.rxpicapp.model.Picture;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
