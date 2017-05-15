@@ -10,6 +10,7 @@ import java.util.concurrent.Callable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
+import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.gemapps.rxpicapp.util.JsonUtil.loadJsonFromResources;
@@ -24,11 +25,12 @@ public class FakeHomePicturesDataSource implements HomePictureDataSource {
     private static final String JSON_EXAMPLE_NAME = "flickr_recent_json.json";
 
     @Override
-    public Observable<List<Picture>> getPictures() {
+    public ConnectableObservable<List<Picture>> getPictures(int page) {
         return Observable.fromCallable(readPictures())
                 .subscribeOn(Schedulers.io())
                 .map(getPicturesFromResult())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread())
+                .share().replay();
     }
 
     private Callable<PictureDeserializer.ResultValue> readPictures() {

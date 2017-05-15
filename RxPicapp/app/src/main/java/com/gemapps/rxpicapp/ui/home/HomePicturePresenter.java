@@ -1,13 +1,16 @@
 package com.gemapps.rxpicapp.ui.home;
 
+import android.util.Log;
+
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.util.PicturePager;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -19,19 +22,21 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
     private static final String TAG = "HomePicturePresenter";
     private HomePictureContract.View mView;
     private HomePictureRepository mRepository;
-    private CompositeDisposable mSubscriptions;
+    private PicturePager mPager;
+    private Disposable mSubscription;
 
     public HomePicturePresenter(HomePictureContract.View homeView,
-                                HomePictureRepository homePictureRepository) {
+                                HomePictureRepository homePictureRepository,
+                                PicturePager pager) {
         mView = homeView;
         mRepository = homePictureRepository;
-        mSubscriptions = new CompositeDisposable();
+        mPager = pager;
         mView.setPresenter(this);
     }
 
     @Override
     public void unSubscribe() {
-        mSubscriptions.clear();
+        if(mSubscription != null) mSubscription.dispose();
     }
 
     @Override
@@ -42,19 +47,24 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
 
     @Override
     public void loadPictures(){
-        mSubscriptions.clear();
-        Disposable subscription = mRepository.getPictures()
+
+        unSubscribe();
+        mPager.stopPagination();
+
+        ConnectableObservable<List<Picture>> connectible = mRepository.getPictures(mPager.getCurrentPage());
+        mPager.startPagination(connectible);
+        mSubscription = connectible
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(listenForPictures());
 
-        mSubscriptions.add(subscription);
+        connectible.connect();
     }
 
     private DisposableObserver<List<Picture>> listenForPictures() {
         return new DisposableObserver<List<Picture>>() {
             @Override
             public void onNext(List<Picture> pictures) {
-
+                Log.d(TAG, "PRESENTER");
                 mView.addPictures(pictures);
                 mView.hideProgress();
             }

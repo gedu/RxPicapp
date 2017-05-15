@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SearchViewTheme">
+        <!--<item name="colorControlActivated">?android:colorAccent</item>-->
+        <item name="android:searchViewStyle">@style/Widget.PicApp.SearchView</item>
+    </style>
+
+    <style name="Widget.PicApp" parent="android:Widget"/>
+
+    <style name="Widget.PicApp.SearchView" parent="android:style/Widget.Material.SearchView">
+        <item name="android:searchIcon">@null</item>
+        <!--<item name="android:searchHintIcon">@null</item>-->
+        <item name="android:queryBackground">@android:color/transparent</item>
+        <item name="android:submitBackground">@android:color/transparent</item>
+    </style>
+</resources>

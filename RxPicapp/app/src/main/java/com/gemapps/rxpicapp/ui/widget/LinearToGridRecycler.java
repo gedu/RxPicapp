@@ -6,11 +6,15 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.gemapps.rxpicapp.R;
 
 import butterknife.BindInt;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by edu on 5/11/17.
@@ -18,12 +22,15 @@ import butterknife.ButterKnife;
 
 public class LinearToGridRecycler extends RecyclerView {
 
+    private static final String TAG = "LinearToGridRecycler";
     private LinearLayoutManager mLinearManager;
     private GridLayoutManager mGridManager;
 
     private BaseRecyclerViewAdapter mAdapter;
     private boolean mIsLoadingMore = false;
     private boolean mIsLinearLayout = true;
+    private Observable<Object> mLoadMore;
+    private ObservableEmitter<Object> mLoadMoreEmitter;
 
     @BindInt(R.integer.grid_column_count) int COLUMN_COUNT;
 
@@ -42,6 +49,10 @@ public class LinearToGridRecycler extends RecyclerView {
         setupLayoutManagers(context);
         setLayoutManager();
         addOnScrollListener(SCROLL_BOTTOM_LISTENER);
+        mLoadMore = Observable.create(e -> {
+            Log.d(TAG, "init: COMPLETABLE");
+            mLoadMoreEmitter = e;
+        }).observeOn(AndroidSchedulers.mainThread());
     }
 
     private void setupLayoutManagers(Context context) {
@@ -61,6 +72,27 @@ public class LinearToGridRecycler extends RecyclerView {
         mAdapter = adapter;
     }
 
+    public void swapListStyle(){
+        mIsLinearLayout = !mIsLinearLayout;
+        setLayoutManager();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public boolean isLinearLayout(){
+        return mIsLinearLayout;
+    }
+
+    public Observable<Object> getLoadingMoreObserver() {
+        return mLoadMore;
+    }
+
+    public void loadingMoreFinished() {
+        if(mIsLoadingMore) {
+            mIsLoadingMore = false;
+            mAdapter.removeBottomProgress();
+        }
+    }
+
     private final RecyclerView.OnScrollListener SCROLL_BOTTOM_LISTENER = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -78,16 +110,26 @@ public class LinearToGridRecycler extends RecyclerView {
                 //note: +3 how many of mItems to have below the current scroll position before loading more
                 if (!mIsLoadingMore && totalItems <= (lastVisibleItem + 3)) {
 
-                    mIsLoadingMore = true;
+
 //                    mHandler.post(mAddProgressRunnable);
+                    if(mLoadMoreEmitter != null){
+                        mIsLoadingMore = true;
+                        mLoadMoreEmitter.onNext(new Object());
+                    }else {
+                        Log.d(TAG, "null");
+                    }
                 }
             }
         }
     };
 
     private int getLastVisibleItem() {
-        if (mIsLinearLayout) return getLinearManager().findLastVisibleItemPosition();
+        if (hasLinearManager()) return getLinearManager().findLastVisibleItemPosition();
         else return getGridManager().findLastVisibleItemPosition();
+    }
+
+    private boolean hasLinearManager() {
+        return getLayoutManager() instanceof LinearLayoutManager;
     }
 
     private LinearLayoutManager getLinearManager() {

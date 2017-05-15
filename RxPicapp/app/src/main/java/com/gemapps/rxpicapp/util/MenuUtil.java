@@ -13,7 +13,7 @@ import com.gemapps.rxpicapp.R;
 public class MenuUtil {
 
     public static Drawable getDrawable(Context context, boolean isList) {
-        return ContextCompat.getDrawable(context, isList ?
+        return ContextCompat.getDrawable(context, !isList ?
                 R.drawable.vc_list_drawable : R.drawable.vc_grid_drawable);
     }
 }

@@ -1,4 +1,4 @@
-package com.gemapps.rxpicapp.ui.home;
+package com.gemapps.rxpicapp.ui.recycleradapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,8 +21,10 @@ import butterknife.BindView;
  * Created by edu on 4/27/17.
  */
 public class HomePictureViewAdapter
-        extends BaseRecyclerViewAdapter<HomePictureViewAdapter.HomePictureViewHolder> {
+        extends BaseRecyclerViewAdapter<ButterViewHolder> {
     private static final String TAG = "HomePictureViewAdapter";
+
+    public static final int VIEW_PICTURE_TYPE = 1;
     private final Context mContext;
     private List<Picture> mItems;
 
@@ -32,25 +34,50 @@ public class HomePictureViewAdapter
     }
 
     @Override
-    public HomePictureViewHolder onCreateViewHolder(ViewGroup parent,
+    public ButterViewHolder onCreateViewHolder(ViewGroup parent,
                                                     int viewType) {
+        if(!isBottomProgressType(viewType)) return onCreatePictureHolder(parent);
+        else return onCreateBottomProgressBar(parent);
+    }
+
+    private ButterViewHolder onCreatePictureHolder(ViewGroup parent) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.home_picture_item_list, parent, false);
         return new HomePictureViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(HomePictureViewHolder holder, int position) {
-        Picture item = mItems.get(position);
+    public void onBindViewHolder(ButterViewHolder holder, int position) {
+        if(!isBottomProgressHolder(holder)) {
+            HomePictureViewHolder pictureHolder = (HomePictureViewHolder) holder;
+            Picture item = mItems.get(position);
 
-        holder.mAuthorName.setText(item.getOwnerName());
-        holder.mPicTitle.setText(item.getTitle());
-        Picasso.with(mContext).load(item.getUrl()).into(holder.mPicImage);
+            pictureHolder.mAuthorName.setText(item.getOwnerName());
+            pictureHolder.mPicTitle.setText(item.getTitle());
+            Picasso.with(mContext).load(item.getUrl()).into(pictureHolder.mPicImage);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mItems == null ? 0 : mItems.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mItems.get(position) == null ? VIEW_LOADING_TYPE: VIEW_PICTURE_TYPE;
+    }
+
+    @Override
+    public void addBottomProgress() {
+        mItems.add(null);
+        notifyItemInserted(mItems.size());
+    }
+
+    @Override
+    public void removeBottomProgress() {
+        mItems.remove(null);
+        notifyItemRemoved(mItems.size() + 1);
     }
 
     public void addPictures(List<Picture> pictures) {

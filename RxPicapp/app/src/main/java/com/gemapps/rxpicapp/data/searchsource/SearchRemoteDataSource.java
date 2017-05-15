@@ -1,6 +1,4 @@
-package com.gemapps.rxpicapp.data.homesource;
-
-import android.util.Log;
+package com.gemapps.rxpicapp.data.searchsource;
 
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.networking.deserializer.PictureDeserializer;
@@ -12,22 +10,17 @@ import java.util.List;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.gemapps.rxpicapp.networking.rest.RetrofitAdapter.buildSearchOptions;
-
 /**
- * Created by edu on 4/17/17.
+ * Created by edu on 5/15/17.
  */
 
-public class HomePictureRemoteDataSource implements HomePictureDataSource {
-
-    private static final String TAG = "HomePictureRemoteDataSo";
+public class SearchRemoteDataSource implements SearchDataSource {
 
     @Override
-    public ConnectableObservable<List<Picture>> getPictures(int page) {
-        Log.d(TAG, "GET PICTURES: "+page);
+    public ConnectableObservable<List<Picture>> getPicturesFromQuery(int page, String query) {
         FlickrSearchService searchService = RetrofitAdapter.createService(FlickrSearchService.class);
         return searchService
-                .searchRecentPhotos(buildSearchOptions("15", String.valueOf(page), null))
+                .searchRecentPhotos(RetrofitAdapter.buildSearchOptions("15", String.valueOf(page), query))
                 .subscribeOn(Schedulers.io())
                 .map(PictureDeserializer.ResultValue::getPictures)
                 .share().replay();

@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="morph_list_title">Morph list</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint"><![CDATA[Photos & more]]></string>
 </resources>

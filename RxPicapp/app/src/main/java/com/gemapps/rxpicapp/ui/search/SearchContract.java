@@ -1,6 +1,4 @@
-package com.gemapps.rxpicapp.ui.home;
-
-import android.support.v4.app.Fragment;
+package com.gemapps.rxpicapp.ui.search;
 
 import com.gemapps.rxpicapp.BaseContractView;
 import com.gemapps.rxpicapp.model.Picture;
@@ -9,26 +7,21 @@ import com.gemapps.rxpicapp.ui.BasePresenter;
 import java.util.List;
 
 /**
- * Created by edu on 4/12/17.
+ * Created by edu on 5/14/17.
  */
 
-public interface HomePictureContract {
+public interface SearchContract {
 
     interface View extends BaseContractView<Presenter> {
 
-        static Fragment newInstance(){
-            return null;
-        }
-
         void showProgressBar();
 
-        void hideProgress();
+        void hideProgressBar();
 
         void addPictures(List<Picture> pictures);
     }
 
     interface Presenter extends BasePresenter {
-
-        void loadPictures();
+        void searchFor(String query);
     }
 }

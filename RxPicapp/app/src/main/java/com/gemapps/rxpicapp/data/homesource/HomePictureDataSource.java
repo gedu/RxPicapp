@@ -4,7 +4,7 @@ import com.gemapps.rxpicapp.model.Picture;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.observables.ConnectableObservable;
 
 /**
  * Created by edu on 4/17/17.
@@ -12,5 +12,5 @@ import io.reactivex.Observable;
 
 public interface HomePictureDataSource {
 
-    Observable<List<Picture>> getPictures();
+    ConnectableObservable<List<Picture>> getPictures(int page);
 }

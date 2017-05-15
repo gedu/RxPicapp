@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      tools:ignore="AlwaysShowAction">
 
-    <item android:title="Item"/>
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/search_title"
+        android:icon="@drawable/ic_search_white_24px"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_swap_list"
+        android:title="@string/morph_list_title"
+        android:icon="@drawable/vc_grid_drawable"
+        app:showAsAction="always"/>
 </menu>
