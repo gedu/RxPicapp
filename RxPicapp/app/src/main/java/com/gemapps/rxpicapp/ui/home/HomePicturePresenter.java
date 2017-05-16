@@ -1,9 +1,11 @@
 package com.gemapps.rxpicapp.ui.home;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.ui.detail.DetailActivity;
 import com.gemapps.rxpicapp.util.PicturePager;
 
 import java.util.List;
@@ -60,11 +62,17 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
         connectible.connect();
     }
 
+    @Override
+    public void onClickPicture(Picture picture) {
+        Intent intent = DetailActivity.newInstance(mView.getContext(), picture);
+        mView.showPictureDetail(intent);
+    }
+
     private DisposableObserver<List<Picture>> listenForPictures() {
         return new DisposableObserver<List<Picture>>() {
             @Override
             public void onNext(List<Picture> pictures) {
-                Log.d(TAG, "PRESENTER");
+                Log.d(TAG, "PRESENTER: ");
                 mView.addPictures(pictures);
                 mView.hideProgress();
             }

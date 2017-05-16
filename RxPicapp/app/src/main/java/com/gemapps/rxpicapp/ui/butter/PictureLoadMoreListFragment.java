@@ -2,7 +2,6 @@ package com.gemapps.rxpicapp.ui.butter;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -34,6 +33,8 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
 
     protected HomePictureViewAdapter mAdapter;
 
+    private HomePictureViewAdapter.PictureAdapterListener mListener = this::onClickPicture;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -41,8 +42,7 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
     }
 
     private void setupRecyclerView() {
-        Log.d(TAG, "setupRecyclerView: ");
-        mAdapter = new HomePictureViewAdapter(getActivity(), new ArrayList<>());
+        mAdapter = new HomePictureViewAdapter(getActivity(), new ArrayList<>(), mListener);
         mPictureRecycler.addAdapter(mAdapter);
         mPictureRecycler.getLoadingMoreObserver()
                 .subscribe(onLoadMoreSubscriber());
@@ -67,10 +67,13 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
     }
 
     protected void swapPicturesListView(MenuItem item) {
-
         mPictureRecycler.swapListStyle();
         item.setIcon(MenuUtil.getDrawable(getContext(),
                 mPictureRecycler.isLinearLayout()));
+    }
+
+    protected void clear() {
+        mAdapter.clear();
     }
 
     protected void addItems(List<Picture> pictures) {
@@ -82,4 +85,5 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
         mAdapter.addBottomProgress();
     }
     protected abstract void onLoadMoreError();
+    protected abstract void onClickPicture(Picture picture);
 }

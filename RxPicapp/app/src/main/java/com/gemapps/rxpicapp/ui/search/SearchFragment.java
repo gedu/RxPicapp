@@ -1,7 +1,10 @@
 package com.gemapps.rxpicapp.ui.search;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,16 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
 
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
+import com.gemapps.rxpicapp.util.AnimUtil;
 
 import java.util.List;
 
 import butterknife.BindView;
 
 import static android.content.Context.SEARCH_SERVICE;
+import static android.view.inputmethod.InputMethodManager.SHOW_FORCED;
 
 
 /**
@@ -32,6 +39,10 @@ public class SearchFragment extends PictureLoadMoreListFragment
         implements SearchContract.View {
 
     private static final String TAG = "SearchFragment";
+    @BindView(R.id.search_background)
+    View mSearchBackground;
+    @BindView(R.id.back_button)
+    ImageButton mBackButton;
     @BindView(R.id.search_view)
     SearchView mSearchView;
 
@@ -56,6 +67,18 @@ public class SearchFragment extends PictureLoadMoreListFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupSearchView();
+        AnimUtil.fadeAnimation(mSearchBackground).start();
+        AnimUtil.fadeAnimation(mSearchView).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mSearchView.requestFocus();
+                InputMethodManager imm = (InputMethodManager) mSearchView.getContext()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mSearchView, SHOW_FORCED);
+            }
+        }).start();
+        AnimUtil.fadeAnimation(mBackButton).start();
     }
 
     @Override
@@ -83,9 +106,13 @@ public class SearchFragment extends PictureLoadMoreListFragment
         mSearchView.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
         mSearchView.setImeOptions(mSearchView.getImeOptions() | EditorInfo.IME_ACTION_SEARCH |
                 EditorInfo.IME_FLAG_NO_EXTRACT_UI | EditorInfo.IME_FLAG_NO_FULLSCREEN);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setIconified(false);
+
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                showProgressBar();
                 mPresenter.searchFor(query);
                 return true;
             }
@@ -101,7 +128,9 @@ public class SearchFragment extends PictureLoadMoreListFragment
     }
 
     private void clearResults() {
-
+        super.clear();
+        hideProgressBar();
+        mPictureRecycler.setVisibility(View.GONE);
     }
 
     public void onNewSearch(String query){
@@ -118,23 +147,29 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void hideProgressBar() {
         Log.d(TAG, "hideProgressBar: ");
-        mProgressBar.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void addPictures(List<Picture> pictures) {
         Log.d(TAG, "addPictures: ");
+        mPictureRecycler.setVisibility(View.VISIBLE);
         addItems(pictures);
     }
 
     @Override
     protected void onLoadMore() {
         super.onLoadMore();
-        //TODO: load more using the query
+        mPresenter.loadMore();
     }
 
     @Override
     protected void onLoadMoreError() {
 
+    }
+
+    @Override
+    protected void onClickPicture(Picture picture) {
+        mPresenter.onClickPicture(picture);
     }
 }

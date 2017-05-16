@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/author_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin"
+        android:foreground="@drawable/row_ripple"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/user_icon_image"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/medium_margin"
+            android:layout_marginRight="@dimen/medium_margin"
+            android:gravity="center"
+            android:clickable="true"
+            android:foreground="@drawable/avatar_ripple"
+            android:transitionName="user_icon"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pic_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="My Awesome title"/>
+
+            <TextView
+                android:id="@+id/user_name_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/bg_light_gray"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                tools:text="My Awesome title"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/pic_date_taken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/medium_margin"
+            android:layout_marginStart="@dimen/medium_margin"
+            android:textAppearance="@style/TextAppearance.CommentTimestamp"
+            tools:text="12-12-12"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/medium_margin">
+
+        <TextView
+            android:id="@+id/pic_comments"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_chat_bubble_outline_black_24px"
+            android:gravity="center"
+            tools:text="999"/>
+
+        <TextView
+            android:id="@+id/pic_faves"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_favorite_border_black_24px"
+            android:gravity="center"
+            tools:text="999"/>
+
+    </LinearLayout>
+
+</LinearLayout>

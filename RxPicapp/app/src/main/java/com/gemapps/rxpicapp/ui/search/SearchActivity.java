@@ -32,6 +32,12 @@ public class SearchActivity extends ButterActivity {
     }
 
     @Override
+    protected void onPause() {
+        overridePendingTransition(0, 0);
+        super.onPause();
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if(intent.hasExtra(SearchManager.QUERY)) {

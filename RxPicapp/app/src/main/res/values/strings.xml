@@ -6,4 +6,17 @@
     <string name="morph_list_title">Morph list</string>
     <string name="search_title">Search</string>
     <string name="search_hint"><![CDATA[Photos & more]]></string>
+    <string name="no_comment_text">No comments</string>
+
+    <plurals name="comments">
+        <item quantity="zero">No Comments</item>
+        <item quantity="one">%s Comment</item>
+        <item quantity="other">%s Comments</item>
+    </plurals>
+
+    <plurals name="faves">
+        <item quantity="zero">No Faves</item>
+        <item quantity="one">%s Fave</item>
+        <item quantity="other">%s Faves</item>
+    </plurals>
 </resources>

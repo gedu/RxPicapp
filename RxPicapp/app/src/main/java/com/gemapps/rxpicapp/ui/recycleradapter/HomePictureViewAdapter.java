@@ -24,13 +24,20 @@ public class HomePictureViewAdapter
         extends BaseRecyclerViewAdapter<ButterViewHolder> {
     private static final String TAG = "HomePictureViewAdapter";
 
+    public interface PictureAdapterListener {
+        void onClick(Picture picture);
+    }
+
     public static final int VIEW_PICTURE_TYPE = 1;
     private final Context mContext;
     private List<Picture> mItems;
+    private PictureAdapterListener mListener;
 
-    public HomePictureViewAdapter(Context context, List<Picture> items) {
-        this.mContext = context;
-        this.mItems = items;
+    public HomePictureViewAdapter(Context context, List<Picture> items,
+                                  PictureAdapterListener listener) {
+        mContext = context;
+        mItems = items;
+        mListener = listener;
     }
 
     @Override
@@ -80,13 +87,19 @@ public class HomePictureViewAdapter
         notifyItemRemoved(mItems.size() + 1);
     }
 
+    public void clear() {
+        mItems.clear();
+        notifyDataSetChanged();
+    }
+
     public void addPictures(List<Picture> pictures) {
         int currentAmount = mItems.size();
         mItems.addAll(currentAmount, pictures);
         notifyItemRangeInserted(currentAmount, pictures.size());
     }
 
-    public class HomePictureViewHolder extends ButterViewHolder {
+    public class HomePictureViewHolder extends ButterViewHolder
+            implements View.OnClickListener {
 
         @BindView(R.id.author_name)
         TextView mAuthorName;
@@ -99,6 +112,12 @@ public class HomePictureViewAdapter
 
         public HomePictureViewHolder(View view) {
             super(view);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mListener != null) mListener.onClick(mItems.get(getAdapterPosition()));
         }
     }
 }

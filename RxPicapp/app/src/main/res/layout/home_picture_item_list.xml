@@ -4,6 +4,8 @@
     android:id="@+id/pic_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackground"
     android:layout_margin="1dp">
     <!--Hack to avoid the use of an ItemDecorator-->
 

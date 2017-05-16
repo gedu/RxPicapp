@@ -1,6 +1,7 @@
 package com.gemapps.rxpicapp.ui.home;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -69,8 +70,13 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void onClickPicture(Picture picture) {
+        mPresenter.onClickPicture(picture);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         mPresenter.loadPictures();
     }
 
@@ -113,5 +119,10 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     @Override
     public void addPictures(List<Picture> pictures) {
         addItems(pictures);
+    }
+
+    @Override
+    public void showPictureDetail(Intent intent) {
+        startActivity(intent);
     }
 }

@@ -23,6 +23,7 @@ public class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.View mView;
     private Disposable mSubscriber;
     private PicturePager mPager;
+    private String mCurrentQuery;
 
     public SearchPresenter(SearchRepository repository,
                            SearchContract.View view,
@@ -44,11 +45,22 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     @Override
+    public void loadMore() {
+        searchFor(mCurrentQuery);
+    }
+
+    @Override
+    public void onClickPicture(Picture picture) {
+
+    }
+
+    @Override
     public void searchFor(String query) {
+        mCurrentQuery = query;
         Log.d(TAG, "searchFor() called with: query = <" + query + ">");
         clearSubscription();
-        mView.showProgressBar();
-        ConnectableObservable<List<Picture>> connectible = mRepository.getPicturesFromQuery(mPager.getCurrentPage(), query);
+        ConnectableObservable<List<Picture>> connectible = mRepository
+                .getPicturesFromQuery(mPager.getCurrentPage(), mCurrentQuery);
         mPager.startPagination(connectible);
         mSubscriber = connectible
                 .observeOn(AndroidSchedulers.mainThread())

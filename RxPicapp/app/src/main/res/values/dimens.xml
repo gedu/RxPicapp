@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="pic_item_linear_list_height">320dp</dimen>
+    <dimen name="pic_item_height">620dp</dimen>
+    <dimen name="big_margin">64dp</dimen>
+    <dimen name="medium_margin">16dp</dimen>
 </resources>

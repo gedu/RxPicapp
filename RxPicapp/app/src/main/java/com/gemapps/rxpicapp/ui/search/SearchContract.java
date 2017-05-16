@@ -22,6 +22,11 @@ public interface SearchContract {
     }
 
     interface Presenter extends BasePresenter {
+
         void searchFor(String query);
+
+        void loadMore();
+
+        void onClickPicture(Picture picture);
     }
 }

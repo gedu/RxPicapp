@@ -1,12 +1,15 @@
 package com.gemapps.rxpicapp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by edu on 4/13/17.
  */
 
-public class Picture {
+public class Picture implements Parcelable {
 
     @SerializedName("id")
     private String mId;
@@ -17,7 +20,7 @@ public class Picture {
     @SerializedName("server")
     private String mServer;
     @SerializedName("farm")
-    private int mFarm;
+    private String mFarm;
     @SerializedName("title")
     private String mTitle;
     @SerializedName("ispublic")
@@ -32,6 +35,21 @@ public class Picture {
     private String mCountComments;
     @SerializedName("url_n")
     private String mUrl;
+
+    public Picture(Parcel in){
+        mId = in.readString();
+        mOwner = in.readString();
+        mSecret = in.readString();
+        mServer = in.readString();
+        mFarm = in.readString();
+        mTitle = in.readString();
+        mDateTaken = in.readString();
+        mOwnerName = in.readString();
+        mCountFaves = in.readString();
+        mCountComments = in.readString();
+        mUrl = in.readString();
+//        mUserItem = in.readParcelable(UserItem.class.getClassLoader());
+    }
 
     public String getId() {
         return mId;
@@ -65,11 +83,11 @@ public class Picture {
         mServer = server;
     }
 
-    public int getFarm() {
+    public String getFarm() {
         return mFarm;
     }
 
-    public void setFarm(int farm) {
+    public void setFarm(String farm) {
         mFarm = farm;
     }
 
@@ -113,8 +131,8 @@ public class Picture {
         mCountFaves = countFaves;
     }
 
-    public String getCountComments() {
-        return mCountComments;
+    public int getCountComments() {
+        return Integer.parseInt(mCountComments);
     }
 
     public void setCountComments(String countComments) {
@@ -128,4 +146,35 @@ public class Picture {
     public void setUrl(String url) {
         mUrl = url;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mId);
+        dest.writeString(mOwner);
+        dest.writeString(mSecret);
+        dest.writeString(mServer);
+        dest.writeString(mFarm);
+        dest.writeString(mTitle);
+        dest.writeString(mDateTaken);
+        dest.writeString(mOwnerName);
+        dest.writeString(mCountFaves);
+        dest.writeString(mCountComments);
+        dest.writeString(mUrl);
+//        dest.writeParcelable(mUserItem, flags);
+    }
+
+    public static final Creator<Picture> CREATOR = new Creator<Picture>() {
+        public Picture createFromParcel(Parcel in) {
+            return new Picture(in);
+        }
+
+        public Picture[] newArray(int size) {
+            return new Picture[size];
+        }
+    };
 }
