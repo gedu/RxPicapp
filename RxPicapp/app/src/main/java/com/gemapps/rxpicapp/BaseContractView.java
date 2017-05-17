@@ -1,5 +1,7 @@
 package com.gemapps.rxpicapp;
 
+import android.content.Context;
+
 import com.gemapps.rxpicapp.ui.BasePresenter;
 
 /**
@@ -8,4 +10,6 @@ import com.gemapps.rxpicapp.ui.BasePresenter;
 public interface BaseContractView<T extends BasePresenter> {
 
     void setPresenter(T presenter);
+
+    Context getContext();
 }

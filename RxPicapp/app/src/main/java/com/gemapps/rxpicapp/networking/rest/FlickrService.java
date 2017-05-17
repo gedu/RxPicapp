@@ -1,7 +1,7 @@
-package com.gemapps.rxpicapp.networking.rest.search;
+package com.gemapps.rxpicapp.networking.rest;
 
+import com.gemapps.rxpicapp.networking.deserializer.CommentDeserializer;
 import com.gemapps.rxpicapp.networking.deserializer.PictureDeserializer;
-import com.gemapps.rxpicapp.networking.rest.FlickrBase;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ import retrofit2.http.QueryMap;
  * Created by edu on 5/4/17.
  */
 
-public interface FlickrSearchService {
+public interface FlickrService {
 
     @GET(FlickrBase.GET_RECENT_METHOD)
     Observable<PictureDeserializer.ResultValue> searchRecentPhotos(
@@ -22,6 +22,11 @@ public interface FlickrSearchService {
 
     @GET(FlickrBase.PEOPLE_PROFILE_METHOD)
     Observable<PictureDeserializer.ResultValue> searchPeopleProfile(
+            @QueryMap Map<String, String> options
+    );
+
+    @GET(FlickrBase.GET_COMMENTS_METHOD)
+    Observable<CommentDeserializer.ResultValue> getComments(
             @QueryMap Map<String, String> options
     );
 }

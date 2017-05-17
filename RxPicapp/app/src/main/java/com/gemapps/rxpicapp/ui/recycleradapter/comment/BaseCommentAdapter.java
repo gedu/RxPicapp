@@ -75,8 +75,8 @@ public abstract class BaseCommentAdapter extends RecyclerView.Adapter<ButterView
 
             mHeaderHolder = (HeaderViewHolder) holder;
 
-            final int commentCount = Integer.parseInt(mPicture.getCountComments());
-            final int favesCount = Integer.parseInt(mPicture.getCountFaves());
+            final int commentCount = mPicture.getCountComments();
+            final int favesCount = mPicture.getCountFaves();
 
             mHeaderHolder.mUsernameView.setText(mPicture.getOwnerName());
             mHeaderHolder.mPicTakenDateView.setText(mPicture.getDateTaken());

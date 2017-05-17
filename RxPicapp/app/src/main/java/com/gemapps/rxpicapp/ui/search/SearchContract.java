@@ -1,5 +1,7 @@
 package com.gemapps.rxpicapp.ui.search;
 
+import android.content.Intent;
+
 import com.gemapps.rxpicapp.BaseContractView;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.BasePresenter;
@@ -19,6 +21,8 @@ public interface SearchContract {
         void hideProgressBar();
 
         void addPictures(List<Picture> pictures);
+
+        void showPictureDetail(Intent intent);
     }
 
     interface Presenter extends BasePresenter {

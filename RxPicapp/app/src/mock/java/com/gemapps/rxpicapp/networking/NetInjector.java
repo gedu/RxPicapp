@@ -2,8 +2,8 @@ package com.gemapps.rxpicapp.networking;
 
 import com.gemapps.rxpicapp.data.detailsource.DetailDataSource;
 import com.gemapps.rxpicapp.data.detailsource.DetailRemoteDataSource;
-import com.gemapps.rxpicapp.data.homesource.FakeHomePicturesDataSource;
 import com.gemapps.rxpicapp.data.homesource.HomePictureDataSource;
+import com.gemapps.rxpicapp.data.homesource.HomePictureRemoteDataSource;
 import com.gemapps.rxpicapp.data.searchsource.SearchDataSource;
 import com.gemapps.rxpicapp.data.searchsource.SearchRemoteDataSource;
 
@@ -14,7 +14,7 @@ import com.gemapps.rxpicapp.data.searchsource.SearchRemoteDataSource;
 public class NetInjector {
 
     public static HomePictureDataSource getHomePictureRequester() {
-        return new FakeHomePicturesDataSource();//HomePictureRemoteDataSource();
+        return new HomePictureRemoteDataSource();
     }
 
     public static SearchDataSource getSearchRequester() {

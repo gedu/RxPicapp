@@ -14,23 +14,23 @@ import retrofit2.Retrofit;
  * Created by edu on 5/10/17.
  */
 
-public class FlickrFactory extends Converter.Factory {
+public class FlickrSearchFactory extends Converter.Factory {
 
-    public static FlickrFactory create() {
-        return new FlickrFactory();
+    public static FlickrSearchFactory create() {
+        return new FlickrSearchFactory();
     }
 
-    private FlickrFactory(){}
+    private FlickrSearchFactory(){}
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
 
-        return FlickrConverter.INSTANCE;
+        return SearchConverter.INSTANCE;
     }
 
-    private static class FlickrConverter implements Converter<ResponseBody, PictureDeserializer.ResultValue> {
+    private static class SearchConverter implements Converter<ResponseBody, PictureDeserializer.ResultValue> {
 
-        static final FlickrConverter INSTANCE = new FlickrConverter();
+        static final SearchConverter INSTANCE = new SearchConverter();
 
         @Override
         public PictureDeserializer.ResultValue convert(ResponseBody value) throws IOException {

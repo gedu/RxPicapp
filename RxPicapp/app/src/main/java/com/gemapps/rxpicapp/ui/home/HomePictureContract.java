@@ -1,6 +1,5 @@
 package com.gemapps.rxpicapp.ui.home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
@@ -27,8 +26,6 @@ public interface HomePictureContract {
         void hideProgress();
 
         void addPictures(List<Picture> pictures);
-
-        Context getContext();
 
         void showPictureDetail(Intent intent);
     }

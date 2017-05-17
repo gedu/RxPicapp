@@ -12,5 +12,5 @@ import io.reactivex.Observable;
 
 public interface DetailDataSource {
 
-    Observable<List<Comment>> getComments();
+    Observable<List<Comment>> getComments(String photoId);
 }

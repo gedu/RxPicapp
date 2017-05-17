@@ -1,9 +1,11 @@
 package com.gemapps.rxpicapp.ui.search;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
 import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.ui.detail.DetailActivity;
 import com.gemapps.rxpicapp.util.PicturePager;
 
 import java.util.List;
@@ -51,7 +53,8 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     @Override
     public void onClickPicture(Picture picture) {
-
+        Intent intent = DetailActivity.newInstance(mView.getContext(), picture);
+        mView.showPictureDetail(intent);
     }
 
     @Override

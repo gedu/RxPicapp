@@ -14,4 +14,5 @@ public interface FlickrBase {
 
     String GET_RECENT_METHOD = "?method=flickr.photos.getRecent";
     String PEOPLE_PROFILE_METHOD = "?method=flickr.people.getInfo";
+    String GET_COMMENTS_METHOD = "?method=flickr.photos.comments.getList";
 }

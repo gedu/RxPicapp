@@ -19,7 +19,7 @@ public class DetailRepository implements DetailDataSource {
     }
 
     @Override
-    public Observable<List<Comment>> getComments() {
-        return mRemoteDataSource.getComments();
+    public Observable<List<Comment>> getComments(String photoId) {
+        return mRemoteDataSource.getComments(photoId);
     }
 }

@@ -47,7 +47,7 @@ public class DetailPresenter implements DetailContract.Presenter {
     private void loadComments() {
         mView.setAdapter(getLoadingAdapter());
 
-        mSubscriber = mRepository.getComments()
+        mSubscriber = mRepository.getComments(mPicture.getId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<Comment>>() {
                     @Override

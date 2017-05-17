@@ -2,8 +2,9 @@ package com.gemapps.rxpicapp.data.searchsource;
 
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.networking.deserializer.PictureDeserializer;
+import com.gemapps.rxpicapp.networking.rest.PicappService;
 import com.gemapps.rxpicapp.networking.rest.RetrofitAdapter;
-import com.gemapps.rxpicapp.networking.rest.search.FlickrSearchService;
+import com.gemapps.rxpicapp.networking.rest.FlickrService;
 
 import java.util.List;
 
@@ -16,9 +17,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SearchRemoteDataSource implements SearchDataSource {
 
+    private PicappService mService;
+
+    public SearchRemoteDataSource() {
+        mService = new PicappService.Builder().build();
+    }
+
     @Override
     public ConnectableObservable<List<Picture>> getPicturesFromQuery(int page, String query) {
-        FlickrSearchService searchService = RetrofitAdapter.createService(FlickrSearchService.class);
+        FlickrService searchService = mService.createService(FlickrService.class);
         return searchService
                 .searchRecentPhotos(RetrofitAdapter.buildSearchOptions("15", String.valueOf(page), query))
                 .subscribeOn(Schedulers.io())

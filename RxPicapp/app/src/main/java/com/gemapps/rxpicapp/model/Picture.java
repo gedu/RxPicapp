@@ -123,8 +123,8 @@ public class Picture implements Parcelable {
         mOwnerName = ownerName;
     }
 
-    public String getCountFaves() {
-        return mCountFaves;
+    public int getCountFaves() {
+        return Integer.parseInt(mCountFaves);
     }
 
     public void setCountFaves(String countFaves) {

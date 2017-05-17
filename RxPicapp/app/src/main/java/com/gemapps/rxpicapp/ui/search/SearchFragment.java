@@ -5,6 +5,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -155,6 +156,11 @@ public class SearchFragment extends PictureLoadMoreListFragment
         Log.d(TAG, "addPictures: ");
         mPictureRecycler.setVisibility(View.VISIBLE);
         addItems(pictures);
+    }
+
+    @Override
+    public void showPictureDetail(Intent intent) {
+        startActivity(intent);
     }
 
     @Override
