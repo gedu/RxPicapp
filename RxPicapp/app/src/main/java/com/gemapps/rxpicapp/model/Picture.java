@@ -36,6 +36,8 @@ public class Picture implements Parcelable {
     @SerializedName("url_n")
     private String mUrl;
 
+    private transient Author mAuthor;
+
     public Picture(Parcel in){
         mId = in.readString();
         mOwner = in.readString();
@@ -48,7 +50,7 @@ public class Picture implements Parcelable {
         mCountFaves = in.readString();
         mCountComments = in.readString();
         mUrl = in.readString();
-//        mUserItem = in.readParcelable(UserItem.class.getClassLoader());
+        mAuthor = in.readParcelable(Author.class.getClassLoader());
     }
 
     public String getId() {
@@ -147,6 +149,10 @@ public class Picture implements Parcelable {
         mUrl = url;
     }
 
+    public void setAuthor(Author author) {
+        mAuthor = author;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -165,7 +171,7 @@ public class Picture implements Parcelable {
         dest.writeString(mCountFaves);
         dest.writeString(mCountComments);
         dest.writeString(mUrl);
-//        dest.writeParcelable(mUserItem, flags);
+        dest.writeParcelable(mAuthor, flags);
     }
 
     public static final Creator<Picture> CREATOR = new Creator<Picture>() {
@@ -177,4 +183,8 @@ public class Picture implements Parcelable {
             return new Picture[size];
         }
     };
+
+    public Author getAuthor() {
+        return mAuthor;
+    }
 }

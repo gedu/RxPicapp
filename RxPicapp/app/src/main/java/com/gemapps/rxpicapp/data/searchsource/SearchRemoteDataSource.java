@@ -27,7 +27,7 @@ public class SearchRemoteDataSource implements SearchDataSource {
     public ConnectableObservable<List<Picture>> getPicturesFromQuery(int page, String query) {
         FlickrService searchService = mService.createService(FlickrService.class);
         return searchService
-                .searchRecentPhotos(RetrofitAdapter.buildSearchOptions("15", String.valueOf(page), query))
+                .searchPhotos(RetrofitAdapter.buildSearchOptions("15", String.valueOf(page), query))
                 .subscribeOn(Schedulers.io())
                 .map(PictureDeserializer.ResultValue::getPictures)
                 .share().replay();

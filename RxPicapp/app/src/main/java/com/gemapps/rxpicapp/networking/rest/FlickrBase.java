@@ -13,6 +13,8 @@ public interface FlickrBase {
     String USER_PIC_URL = "http://farm%s.staticflickr.com/%s/buddyicons/%s.jpg";
 
     String GET_RECENT_METHOD = "?method=flickr.photos.getRecent";
+    String SEARCH_METHOD = "?method=flickr.photos.search";
     String PEOPLE_PROFILE_METHOD = "?method=flickr.people.getInfo";
     String GET_COMMENTS_METHOD = "?method=flickr.photos.comments.getList";
+    String GET_AUTHOR_INFO = "?method=flickr.people.getInfo";
 }

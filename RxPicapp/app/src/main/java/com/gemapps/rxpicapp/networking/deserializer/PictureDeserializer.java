@@ -1,7 +1,5 @@
 package com.gemapps.rxpicapp.networking.deserializer;
 
-import android.util.Log;
-
 import com.gemapps.rxpicapp.model.Picture;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -47,13 +45,14 @@ public class PictureDeserializer implements JsonDeserializer<PictureDeserializer
         return resultValue;
     }
 
-    public static class ResultValue {
+    public static class ResultValue implements ResultHolder {
         private List<Picture> mPictures = new ArrayList<>();
 
         public void addPicture(Picture picture){
             mPictures.add(picture);
         }
 
+        @Override
         public List<Picture> getPictures() {
             return mPictures;
         }

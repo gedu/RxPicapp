@@ -1,6 +1,7 @@
 package com.gemapps.rxpicapp.ui.recycleradapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class HomePictureViewAdapter
         if(!isBottomProgressHolder(holder)) {
             HomePictureViewHolder pictureHolder = (HomePictureViewHolder) holder;
             Picture item = mItems.get(position);
-
+            if(item.getAuthor() != null) Log.d(TAG, "onBindViewHolder: "+ item.getAuthor().getIconUrl());
             pictureHolder.mAuthorName.setText(item.getOwnerName());
             pictureHolder.mPicTitle.setText(item.getTitle());
             Picasso.with(mContext).load(item.getUrl()).into(pictureHolder.mPicImage);
