@@ -14,6 +14,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.schedulers.Schedulers;
@@ -40,21 +41,22 @@ public abstract class PictureMappingDataSource {
         return resultHolder
                 .map(ResultHolder::getPictures)
                 .flatMapIterable(pictures -> pictures)
-                .flatMap(new Function<Picture, ObservableSource<Author>>() {
-                    @Override
-                    public ObservableSource<Author> apply(Picture picture) throws Exception {
-                        Log.d(TAG, "2: "+picture.getTitle());
-                        return mAuthorService.getAuthorInfo(RetrofitAdapter
-                                .buildUserInfoOptions(picture.getOwner()));
-                    }
-                }, (picture, author) -> {
-                    Log.d(TAG, "setting author: "+author.getId());
-                    picture.setAuthor(author);
-                    return picture;
-                })
+                .flatMap(getEachAuthor(), setAuthorInPicture())
                 .toList().toObservable()
                 .subscribeOn(Schedulers.io())
                 .share().replay();
+    }
+
+    private Function<Picture, ObservableSource<Author>> getEachAuthor() {
+        return picture -> mAuthorService.getAuthorInfo(RetrofitAdapter
+                .buildUserInfoOptions(picture.getOwner()));
+    }
+
+    private BiFunction<Picture, Author, Picture> setAuthorInPicture() {
+        return (picture, author) -> {
+            picture.setAuthor(author);
+            return picture;
+        };
     }
 
 }

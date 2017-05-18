@@ -23,7 +23,7 @@ public interface FlickrService {
     );
 
     @GET(FlickrBase.SEARCH_METHOD)
-    Observable<PictureDeserializer.ResultValue> searchPhotos(
+    Observable<ResultHolder> searchPhotos(
             @QueryMap(encoded = true)Map<String, String> options
     );
 

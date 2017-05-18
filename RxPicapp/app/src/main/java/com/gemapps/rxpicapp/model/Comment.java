@@ -1,5 +1,6 @@
 package com.gemapps.rxpicapp.model;
 
+import com.gemapps.rxpicapp.networking.rest.FlickrBase;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -20,6 +21,10 @@ public class Comment {
 
     public Comment() {
         mAuthorName = "Nobody";
+    }
+
+    public String getIconUrl() {
+        return String.format(FlickrBase.USER_PIC_URL, mIconFarmId, mIconServerId, mAuthorId);
     }
 
     public String getId() {

@@ -4,7 +4,6 @@ package com.gemapps.rxpicapp.ui.search;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,25 +11,24 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
 import com.gemapps.rxpicapp.util.AnimUtil;
+import com.gemapps.rxpicapp.util.ImmUtil;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static android.content.Context.SEARCH_SERVICE;
-import static android.view.inputmethod.InputMethodManager.SHOW_FORCED;
 
 
 /**
@@ -74,9 +72,7 @@ public class SearchFragment extends PictureLoadMoreListFragment
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 mSearchView.requestFocus();
-                InputMethodManager imm = (InputMethodManager) mSearchView.getContext()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mSearchView, SHOW_FORCED);
+                ImmUtil.showIme(mSearchView);
             }
         }).start();
         AnimUtil.fadeAnimation(mBackButton).start();
@@ -99,6 +95,11 @@ public class SearchFragment extends PictureLoadMoreListFragment
         super.onPause();
     }
 
+    @OnClick(R.id.back_button)
+    public void onBackClick() {
+        getActivity().onBackPressed();
+    }
+
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(SEARCH_SERVICE);
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
@@ -115,6 +116,7 @@ public class SearchFragment extends PictureLoadMoreListFragment
             public boolean onQueryTextSubmit(String query) {
                 showProgressBar();
                 mPresenter.searchFor(query);
+                ImmUtil.hideIme(mSearchView);
                 return true;
             }
 
@@ -137,23 +139,21 @@ public class SearchFragment extends PictureLoadMoreListFragment
     public void onNewSearch(String query){
         mSearchView.setQuery(query, false);
         mPresenter.searchFor(query);
+        ImmUtil.hideIme(mSearchView);
     }
 
     @Override
     public void showProgressBar() {
-        Log.d(TAG, "showProgressBar: ");
         mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
-        Log.d(TAG, "hideProgressBar: ");
         mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void addPictures(List<Picture> pictures) {
-        Log.d(TAG, "addPictures: ");
         mPictureRecycler.setVisibility(View.VISIBLE);
         addItems(pictures);
     }

@@ -15,6 +15,7 @@ import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Comment;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.ButterViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -48,12 +49,11 @@ public class CommentAdapter extends BaseCommentAdapter {
                         System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
         cHolder.mMsg.setText(Html.fromHtml(item.getMsg()));
 
-//        Picasso.with(mContext)
-//                .load(item.getIconUrl())
-//                .error(R.drawable.ic_face_black_48px)
-//                .placeholder(R.drawable.ic_face_black_48px)
-////                .transform(new CircleTransform())
-//                .into(cHolder.mUserIcon);
+        Picasso.with(mContext)
+                .load(item.getIconUrl())
+                .error(R.drawable.ic_face_black_48px)
+                .placeholder(R.drawable.ic_face_black_48px)
+                .into(cHolder.mUserIcon);
     }
 
     public class CommentViewHolder extends ButterViewHolder {

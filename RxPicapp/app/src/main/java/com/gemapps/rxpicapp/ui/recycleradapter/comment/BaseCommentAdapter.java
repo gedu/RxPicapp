@@ -13,6 +13,7 @@ import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Comment;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.ButterViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -63,9 +64,6 @@ public abstract class BaseCommentAdapter extends RecyclerView.Adapter<ButterView
         }else {
             return getCommentViewHolder(parent, viewType);
         }
-//        View v = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.comment_item_list, parent, false);
-//        return new CommentViewHolder(v);
     }
 
     @Override
@@ -86,13 +84,13 @@ public abstract class BaseCommentAdapter extends RecyclerView.Adapter<ButterView
             mHeaderHolder.mFavesView.setText(mResources.getQuantityString(R.plurals.faves, favesCount,
                     favesCount));
 
-//            if(mUserItem != null) {
-//                Picasso.with(mContext)
-//                        .load(mUserItem.getIconUrl())
-//                        .placeholder(R.drawable.ic_buddy)
-//                        .error(R.drawable.ic_buddy)
-//                        .transform(new CircleTransform()).into(mHeaderHolder.mIconView);
-//            }
+            if(mPicture != null) {
+                Picasso.with(mContext)
+                        .load(mPicture.getAuthor().getIconUrl())
+                        .placeholder(R.drawable.ic_face_black_48px)
+                        .error(R.drawable.ic_face_black_48px)
+                        .into(mHeaderHolder.mIconView);
+            }
 
         }else{
 

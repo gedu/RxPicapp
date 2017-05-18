@@ -28,7 +28,7 @@ public class Author implements Parcelable {
         mIconFarmId = in.readString();
     }
 
-    public String getIconUrl(){
+    public String getIconUrl() {
         return String.format(FlickrBase.USER_PIC_URL, mIconFarmId, mIconServerId, mNsid);
     }
 

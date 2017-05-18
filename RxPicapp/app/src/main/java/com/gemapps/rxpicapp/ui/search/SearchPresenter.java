@@ -60,7 +60,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void searchFor(String query) {
         mCurrentQuery = query;
-        Log.d(TAG, "searchFor() called with: query = <" + query + ">");
         clearSubscription();
         ConnectableObservable<List<Picture>> connectible = mRepository
                 .getPicturesFromQuery(mPager.getCurrentPage(), mCurrentQuery);
