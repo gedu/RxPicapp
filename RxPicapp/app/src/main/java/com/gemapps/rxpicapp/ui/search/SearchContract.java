@@ -2,7 +2,7 @@ package com.gemapps.rxpicapp.ui.search;
 
 import android.content.Intent;
 
-import com.gemapps.rxpicapp.BaseContractView;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.BasePresenter;
 

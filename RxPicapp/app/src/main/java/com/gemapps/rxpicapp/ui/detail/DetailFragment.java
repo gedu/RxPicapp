@@ -57,7 +57,7 @@ public class DetailFragment extends ButterFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPresenter.subscribe();
+        mPresenter.load();
         setupRecyclerView();
     }
 
@@ -69,7 +69,7 @@ public class DetailFragment extends ButterFragment
 
     @Override
     public void onPause() {
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
         super.onPause();
     }
 

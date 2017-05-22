@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
-import com.gemapps.rxpicapp.BaseContractView;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
 import com.gemapps.rxpicapp.networking.NetInjector;
@@ -16,19 +16,29 @@ import com.gemapps.rxpicapp.util.PicturePager;
 
 public class SearchActivity extends ButterActivity {
 
+    private static final String IS_LINEAR_KEY = "rxpicapp.IS_LINEAR";
     private SearchFragment mSearchFragment;
+    private boolean mIsLinearLayout = true;
 
-    public static Intent newInstance(Context context) {
-        return new Intent(context, SearchActivity.class);
+    public static Intent newInstance(Context context, boolean isLinear) {
+        Intent intent = new Intent(context, SearchActivity.class);
+        intent.putExtra(IS_LINEAR_KEY, isLinear);
+        return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        setIntentParams();
         mSearchFragment = (SearchFragment) setupFragment();
         setupPresenter(mSearchFragment);
+    }
+
+    private void setIntentParams() {
+        if (getIntent().hasExtra(IS_LINEAR_KEY)) {
+            mIsLinearLayout = getIntent().getBooleanExtra(IS_LINEAR_KEY, true);
+        }
     }
 
     @Override
@@ -50,7 +60,7 @@ public class SearchActivity extends ButterActivity {
 
     @Override
     protected Fragment getFragment() {
-        return SearchFragment.newInstance();
+        return SearchFragment.newInstance(mIsLinearLayout);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.gemapps.rxpicapp.ui.recycleradapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.ButterViewHolder;
-import com.gemapps.rxpicapp.ui.widget.BaseRecyclerViewAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,7 +20,7 @@ import butterknife.BindView;
  * Created by edu on 4/27/17.
  */
 public class HomePictureViewAdapter
-        extends BaseRecyclerViewAdapter<ButterViewHolder> {
+        extends BaseRecyclerViewAdapter<ButterViewHolder, Picture> {
     private static final String TAG = "HomePictureViewAdapter";
 
     public interface PictureAdapterListener {
@@ -59,7 +57,7 @@ public class HomePictureViewAdapter
         if(!isBottomProgressHolder(holder)) {
             HomePictureViewHolder pictureHolder = (HomePictureViewHolder) holder;
             Picture item = mItems.get(position);
-            if(item.getAuthor() != null) Log.d(TAG, "onBindViewHolder: "+ item.getAuthor().getIconUrl());
+
             pictureHolder.mAuthorName.setText(item.getOwnerName());
             pictureHolder.mPicTitle.setText(item.getTitle());
             Picasso.with(mContext).load(item.getUrl()).into(pictureHolder.mPicImage);
@@ -86,6 +84,17 @@ public class HomePictureViewAdapter
     public void removeBottomProgress() {
         mItems.remove(null);
         notifyItemRemoved(mItems.size() + 1);
+    }
+
+    @Override
+    public List<Picture> getItems() {
+        return mItems;
+    }
+
+    @Override
+    public void addItems(List<Picture> items) {
+        mItems.addAll(items);
+        notifyDataSetChanged();
     }
 
     public void clear() {

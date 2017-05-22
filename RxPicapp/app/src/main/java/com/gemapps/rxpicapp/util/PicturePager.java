@@ -52,6 +52,9 @@ public class PicturePager {
         if(mObserver != null) mObserver.dispose();
     }
 
+    public void goBackPage() {
+        --mCurrentPage;
+    }
     public int getCurrentPage() {
         return mCurrentPage;
     }

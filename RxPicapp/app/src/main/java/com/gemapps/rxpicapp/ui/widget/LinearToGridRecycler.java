@@ -1,6 +1,8 @@
 package com.gemapps.rxpicapp.ui.widget;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.gemapps.rxpicapp.R;
+import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.ui.recycleradapter.BaseRecyclerViewAdapter;
+
+import java.util.List;
 
 import butterknife.BindInt;
 import butterknife.ButterKnife;
@@ -93,6 +99,47 @@ public class LinearToGridRecycler extends RecyclerView {
         }
     }
 
+    public boolean isLoadingMore() {
+        Log.d(TAG, "Asking for is loading more: "+mIsLoadingMore);
+        return mIsLoadingMore;
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        RecyclerSavedState savedState = new RecyclerSavedState(super.onSaveInstanceState());
+        savedState.currentPictures = mAdapter.getItems();
+        savedState.isLoading = mIsLoadingMore;
+        savedState.isLinear = mIsLinearLayout;
+        return savedState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        if(state instanceof RecyclerSavedState) {
+            RecyclerSavedState savedState = (RecyclerSavedState) state;
+            super.onRestoreInstanceState(savedState.getSuperState());
+            restoreItems(savedState);
+            restoreLoading(savedState);
+            restoreLayout(savedState);
+        } else {
+            super.onRestoreInstanceState(state);
+        }
+    }
+
+    private void restoreItems(RecyclerSavedState savedState) {
+        mAdapter.addItems(savedState.currentPictures);
+    }
+
+    private void restoreLoading(RecyclerSavedState savedState) {
+        mIsLoadingMore = savedState.isLoading;
+        Log.d(TAG, "restore loading more data: "+mIsLoadingMore);
+    }
+
+    private void restoreLayout(RecyclerSavedState savedState) {
+        mIsLinearLayout = savedState.isLinear;
+        setLayoutManager();
+    }
+
     private final RecyclerView.OnScrollListener SCROLL_BOTTOM_LISTENER = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -149,4 +196,40 @@ public class LinearToGridRecycler extends RecyclerView {
                     mGridManager.getSpanCount() : 1;
         }
     };
+
+    public static class RecyclerSavedState extends BaseSavedState {
+
+        List<Picture> currentPictures;
+        boolean isLoading;
+        boolean isLinear;
+
+        public RecyclerSavedState(Parcel source) {
+            super(source);
+            source.readTypedList(currentPictures, Picture.CREATOR);
+            isLoading = source.readInt() == 1;
+            isLinear = source.readInt() == 1;
+        }
+
+        public RecyclerSavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeTypedList(currentPictures);
+            out.writeInt(isLoading ? 1 : 0);
+            out.writeInt(isLinear ? 1 : 0);
+        }
+
+        public static final Creator<RecyclerSavedState> CREATOR = new Creator<RecyclerSavedState>() {
+            public RecyclerSavedState createFromParcel(Parcel in) {
+                return new RecyclerSavedState(in);
+            }
+
+            public RecyclerSavedState[] newArray(int size) {
+                return new RecyclerSavedState[size];
+            }
+        };
+    }
 }

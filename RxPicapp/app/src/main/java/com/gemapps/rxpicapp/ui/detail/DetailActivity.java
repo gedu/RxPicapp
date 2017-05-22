@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.gemapps.rxpicapp.BaseContractView;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.data.detailsource.DetailRepository;
 import com.gemapps.rxpicapp.model.Picture;

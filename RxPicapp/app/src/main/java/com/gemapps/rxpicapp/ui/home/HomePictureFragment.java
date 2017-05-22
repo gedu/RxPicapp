@@ -5,19 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
-import com.gemapps.rxpicapp.ui.search.SearchActivity;
 
 import java.util.List;
 
@@ -46,38 +42,32 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return onCreateView(inflater, container, R.layout.fragment_home_picture);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mPresenter.onViewCreated(savedInstanceState);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onPause() {
+        mPresenter.dispose();
+        super.onPause();
     }
 
     @Override
     protected void onLoadMore() {
-        Log.d(TAG, "onNext() called");
         super.onLoadMore();
         mPresenter.loadPictures();
     }
 
     @Override
     protected void onLoadMoreError() {
-        Toast.makeText(getActivity(), "Failed to laod more", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Failed to loaind more", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onClickPicture(Picture picture) {
         mPresenter.onClickPicture(picture);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.loadPictures();
     }
 
     @Override
@@ -89,16 +79,7 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId())  {
-            case R.id.action_swap_list:
-                swapPicturesListView(item);
-                return true;
-            case R.id.action_search:
-                startActivity(SearchActivity.newInstance(getContext()));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return mPresenter.optionSelected(item) || super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -123,6 +104,31 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
 
     @Override
     public void showPictureDetail(Intent intent) {
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean isLoadingMore() {
+        return mPictureRecycler.isLoadingMore();
+    }
+
+    @Override
+    public void swapPicturesListView(MenuItem item) {
+        super.swapPicturesListView(item);
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.fragment_home_picture;
+    }
+
+    @Override
+    public boolean isLinearLayout() {
+        return mPictureRecycler.isLinearLayout();
+    }
+
+    @Override
+    public void startSearch(Intent intent) {
         startActivity(intent);
     }
 }

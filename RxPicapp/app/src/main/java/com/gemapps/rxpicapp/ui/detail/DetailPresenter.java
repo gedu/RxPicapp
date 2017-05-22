@@ -1,5 +1,6 @@
 package com.gemapps.rxpicapp.ui.detail;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
 import com.gemapps.rxpicapp.data.detailsource.DetailRepository;
@@ -37,11 +38,16 @@ public class DetailPresenter implements DetailContract.Presenter {
     }
 
     @Override
-    public void subscribe() {
+    public void load() {
         mView.loadPicture(mPicture.getUrl());
 
         if (mPicture.getCountComments() > 0) loadComments();
         else mView.setAdapter(getNoCommentsAdapter());
+    }
+
+    @Override
+    public void onViewCreated(Bundle savedState) {
+
     }
 
     private void loadComments() {
@@ -84,7 +90,7 @@ public class DetailPresenter implements DetailContract.Presenter {
     }
 
     @Override
-    public void unSubscribe() {
+    public void dispose() {
         clearSubscription();
     }
 }

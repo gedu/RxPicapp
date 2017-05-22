@@ -1,6 +1,7 @@
 package com.gemapps.rxpicapp.ui.search;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
@@ -20,7 +21,9 @@ import io.reactivex.observers.DisposableObserver;
  */
 
 public class SearchPresenter implements SearchContract.Presenter {
+
     private static final String TAG = "SearchPresenter";
+
     private SearchRepository mRepository;
     private SearchContract.View mView;
     private Disposable mSubscriber;
@@ -33,16 +36,22 @@ public class SearchPresenter implements SearchContract.Presenter {
         mRepository = repository;
         mView = view;
         mPager = pager;
+
         mView.setPresenter(this);
     }
 
     @Override
-    public void subscribe() {
+    public void load() {
 
     }
 
     @Override
-    public void unSubscribe() {
+    public void onViewCreated(Bundle savedState) {
+
+    }
+
+    @Override
+    public void dispose() {
         clearSubscription();
     }
 

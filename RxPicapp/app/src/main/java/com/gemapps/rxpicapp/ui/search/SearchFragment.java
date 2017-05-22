@@ -11,15 +11,14 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
 
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
+import com.gemapps.rxpicapp.ui.widget.LinearToGridRecycler;
 import com.gemapps.rxpicapp.util.AnimUtil;
 import com.gemapps.rxpicapp.util.ImmUtil;
 
@@ -38,34 +37,44 @@ public class SearchFragment extends PictureLoadMoreListFragment
         implements SearchContract.View {
 
     private static final String TAG = "SearchFragment";
+    private static final String IS_LINEAR_KEY = "rxpicapp.IS_LINEAR_KEY";
     @BindView(R.id.search_background)
     View mSearchBackground;
     @BindView(R.id.back_button)
     ImageButton mBackButton;
     @BindView(R.id.search_view)
     SearchView mSearchView;
+    @BindView(R.id.picture_recycler)
+    LinearToGridRecycler mRecycler;
 
+    private boolean mIsLinear;
     private SearchContract.Presenter mPresenter;
 
     public SearchFragment() {
         // Required empty public constructor
     }
 
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
+    public static SearchFragment newInstance(boolean isLinearLayout) {
+        SearchFragment fragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(IS_LINEAR_KEY, isLinearLayout);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return onCreateView(inflater, container, R.layout.fragment_search);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(getArguments() != null) {
+            mIsLinear = getArguments().getBoolean(IS_LINEAR_KEY);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupSearchView();
+        setupRecycler();
         AnimUtil.fadeAnimation(mSearchBackground).start();
         AnimUtil.fadeAnimation(mSearchView).setListener(new AnimatorListenerAdapter() {
             @Override
@@ -78,6 +87,10 @@ public class SearchFragment extends PictureLoadMoreListFragment
         AnimUtil.fadeAnimation(mBackButton).start();
     }
 
+    private void setupRecycler() {
+        if(!mIsLinear) mRecycler.swapListStyle();
+    }
+
     @Override
     public void setPresenter(SearchContract.Presenter presenter) {
         mPresenter = presenter;
@@ -86,12 +99,12 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void onStart() {
         super.onStart();
-        mPresenter.subscribe();
+        mPresenter.load();
     }
 
     @Override
     public void onPause() {
-        mPresenter.unSubscribe();
+        mPresenter.dispose();
         super.onPause();
     }
 
@@ -161,6 +174,11 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void showPictureDetail(Intent intent) {
         startActivity(intent);
+    }
+
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.fragment_search;
     }
 
     @Override

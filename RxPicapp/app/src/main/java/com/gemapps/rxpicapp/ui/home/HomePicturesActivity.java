@@ -3,7 +3,7 @@ package com.gemapps.rxpicapp.ui.home;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.gemapps.rxpicapp.BaseContractView;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.networking.NetInjector;

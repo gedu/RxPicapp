@@ -1,11 +1,15 @@
 package com.gemapps.rxpicapp.ui.home;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
+import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.detail.DetailActivity;
+import com.gemapps.rxpicapp.ui.search.SearchActivity;
 import com.gemapps.rxpicapp.util.PicturePager;
 
 import java.util.List;
@@ -37,21 +41,33 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
     }
 
     @Override
-    public void unSubscribe() {
-        if(mSubscription != null) mSubscription.dispose();
+    public void dispose() {
+        if(mSubscription != null) {
+            mSubscription.dispose();
+        }
+        mPager.stopPagination();
     }
 
     @Override
-    public void subscribe() {
+    public void load() {
         mView.showProgressBar();
         loadPictures();
     }
 
     @Override
-    public void loadPictures(){
+    public void onViewCreated(Bundle savedState) {
+        Log.d(TAG, "onViewCreated() called with: savedState = <" + savedState + ">");
+        if(savedState == null) load();
+        else if(mView.isLoadingMore()) {
+            Log.d(TAG, "BEFORE pager: "+mPager.getCurrentPage());
+            mPager.goBackPage();
+            Log.d(TAG, "onViewCreated: pager: "+mPager.getCurrentPage());
+            loadPictures();
+        }
+    }
 
-        unSubscribe();
-        mPager.stopPagination();
+    @Override
+    public void loadPictures(){
 
         ConnectableObservable<List<Picture>> connectible = mRepository.getPictures(mPager.getCurrentPage());
         mPager.startPagination(connectible);
@@ -66,6 +82,21 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
     public void onClickPicture(Picture picture) {
         Intent intent = DetailActivity.newInstance(mView.getContext(), picture);
         mView.showPictureDetail(intent);
+    }
+
+    @Override
+    public boolean optionSelected(MenuItem item) {
+        switch (item.getItemId())  {
+            case R.id.action_swap_list:
+                mView.swapPicturesListView(item);
+                return true;
+            case R.id.action_search:
+                mView.startSearch(SearchActivity.newInstance(mView.getContext(),
+                        mView.isLinearLayout()));
+                return true;
+            default:
+                return false;
+        }
     }
 
     private DisposableObserver<List<Picture>> listenForPictures() {

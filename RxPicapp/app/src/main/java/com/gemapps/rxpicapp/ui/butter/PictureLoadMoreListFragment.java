@@ -1,9 +1,13 @@
 package com.gemapps.rxpicapp.ui.butter;
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.gemapps.rxpicapp.R;
@@ -35,10 +39,14 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
 
     private HomePictureViewAdapter.PictureAdapterListener mListener = this::onClickPicture;
 
+    @Nullable
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
+        View rootView = onCreateView(inflater, container, getLayoutResource());
         setupRecyclerView();
+        return rootView;
     }
 
     private void setupRecyclerView() {
@@ -81,6 +89,7 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
         mAdapter.addPictures(pictures);
     }
 
+    protected abstract @LayoutRes int getLayoutResource();
     protected void onLoadMore() {
         mAdapter.addBottomProgress();
     }

@@ -2,8 +2,9 @@ package com.gemapps.rxpicapp.ui.home;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 
-import com.gemapps.rxpicapp.BaseContractView;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.BasePresenter;
 
@@ -28,6 +29,14 @@ public interface HomePictureContract {
         void addPictures(List<Picture> pictures);
 
         void showPictureDetail(Intent intent);
+
+        boolean isLoadingMore();
+
+        void swapPicturesListView(MenuItem item);
+
+        boolean isLinearLayout();
+
+        void startSearch(Intent intent);
     }
 
     interface Presenter extends BasePresenter {
@@ -35,5 +44,7 @@ public interface HomePictureContract {
         void loadPictures();
 
         void onClickPicture(Picture picture);
+
+        boolean optionSelected(MenuItem item);
     }
 }

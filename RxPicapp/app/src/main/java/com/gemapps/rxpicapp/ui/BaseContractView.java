@@ -1,13 +1,11 @@
-package com.gemapps.rxpicapp;
+package com.gemapps.rxpicapp.ui;
 
 import android.content.Context;
-
-import com.gemapps.rxpicapp.ui.BasePresenter;
 
 /**
  * Created by edu on 4/12/17.
  */
-public interface BaseContractView<T extends BasePresenter> {
+public interface BaseContractView<T extends com.gemapps.rxpicapp.ui.BasePresenter> {
 
     void setPresenter(T presenter);
 

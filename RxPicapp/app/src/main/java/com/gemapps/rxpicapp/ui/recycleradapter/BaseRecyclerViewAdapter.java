@@ -1,4 +1,4 @@
-package com.gemapps.rxpicapp.ui.widget;
+package com.gemapps.rxpicapp.ui.recycleradapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.ui.butter.ButterViewHolder;
 
+import java.util.List;
+
 /**
  * Created by edu on 5/11/17.
  */
 
-public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder>
+public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder, T>
         extends RecyclerView.Adapter<VH> {
 
     public static final int VIEW_LOADING_TYPE = 0;
@@ -35,6 +37,10 @@ public abstract class BaseRecyclerViewAdapter<VH extends RecyclerView.ViewHolder
     public abstract void addBottomProgress();
 
     public abstract void removeBottomProgress();
+
+    public abstract List<T> getItems();
+
+    public abstract void addItems(List<T> items);
 
     public static class BottomProgressHolder extends ButterViewHolder {
 
