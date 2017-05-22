@@ -45,7 +45,8 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPresenter.onViewCreated(savedInstanceState);
+        //Need to do it in the next frame to let the views can be fully restored
+        view.post(() -> mPresenter.onViewCreated(savedInstanceState));
     }
 
     @Override

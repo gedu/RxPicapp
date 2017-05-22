@@ -107,9 +107,9 @@ public class LinearToGridRecycler extends RecyclerView {
     @Override
     protected Parcelable onSaveInstanceState() {
         RecyclerSavedState savedState = new RecyclerSavedState(super.onSaveInstanceState());
-        savedState.currentPictures = mAdapter.getItems();
-        savedState.isLoading = mIsLoadingMore;
         savedState.isLinear = mIsLinearLayout;
+        savedState.isLoading = mIsLoadingMore;
+        savedState.currentPictures = mAdapter.getItems();
         return savedState;
     }
 

@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
-import com.gemapps.rxpicapp.ui.widget.LinearToGridRecycler;
 import com.gemapps.rxpicapp.util.AnimUtil;
 import com.gemapps.rxpicapp.util.ImmUtil;
 
@@ -44,8 +43,6 @@ public class SearchFragment extends PictureLoadMoreListFragment
     ImageButton mBackButton;
     @BindView(R.id.search_view)
     SearchView mSearchView;
-    @BindView(R.id.picture_recycler)
-    LinearToGridRecycler mRecycler;
 
     private boolean mIsLinear;
     private SearchContract.Presenter mPresenter;
@@ -88,7 +85,7 @@ public class SearchFragment extends PictureLoadMoreListFragment
     }
 
     private void setupRecycler() {
-        if(!mIsLinear) mRecycler.swapListStyle();
+        if(!mIsLinear) mPictureRecycler.swapListStyle();
     }
 
     @Override
