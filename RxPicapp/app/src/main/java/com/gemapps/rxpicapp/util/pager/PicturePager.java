@@ -1,4 +1,4 @@
-package com.gemapps.rxpicapp.util;
+package com.gemapps.rxpicapp.util.pager;
 
 import android.util.Log;
 

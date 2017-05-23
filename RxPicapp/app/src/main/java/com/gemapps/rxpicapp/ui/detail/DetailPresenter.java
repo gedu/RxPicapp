@@ -50,6 +50,11 @@ public class DetailPresenter implements DetailContract.Presenter {
 
     }
 
+    @Override
+    public void onResume() {
+
+    }
+
     private void loadComments() {
         mView.setAdapter(getLoadingAdapter());
 

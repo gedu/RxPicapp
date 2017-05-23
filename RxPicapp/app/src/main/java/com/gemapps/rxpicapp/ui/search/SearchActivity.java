@@ -7,15 +7,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
-import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
 import com.gemapps.rxpicapp.networking.NetInjector;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.ui.butter.ButterActivity;
-import com.gemapps.rxpicapp.util.PicturePager;
+import com.gemapps.rxpicapp.util.pager.PicturePagerFactory;
 
 public class SearchActivity extends ButterActivity {
 
+    public static final int PAGER_ID = 2;
     private static final String IS_LINEAR_KEY = "rxpicapp.IS_LINEAR";
     private SearchFragment mSearchFragment;
     private boolean mIsLinearLayout = true;
@@ -69,6 +70,6 @@ public class SearchActivity extends ButterActivity {
         new SearchPresenter(
                 new SearchRepository(NetInjector.getSearchRequester()),
                 (SearchContract.View) view,
-                new PicturePager());
+                PicturePagerFactory.getPager(PAGER_ID));
     }
 }

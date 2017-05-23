@@ -7,7 +7,7 @@ import android.util.Log;
 import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.detail.DetailActivity;
-import com.gemapps.rxpicapp.util.PicturePager;
+import com.gemapps.rxpicapp.util.pager.PicturePager;
 
 import java.util.List;
 
@@ -48,6 +48,24 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void onViewCreated(Bundle savedState) {
 
+        if(savedState == null) mView.setupStarUpUI();
+        else loadMoreIfNeeded();
+    }
+
+    @Override
+    public void onResume() {
+        loadMoreIfNeeded();
+    }
+
+    private void loadMoreIfNeeded() {
+        if(mView.isLoadingMore()) loadPreviousPictures();
+    }
+
+    private void loadPreviousPictures() {
+        Log.d(TAG, "BEFORE pager: "+mPager.getCurrentPage());
+        mPager.goBackPage();
+        Log.d(TAG, "onViewCreated: pager: "+mPager.getCurrentPage());
+        loadMore();
     }
 
     @Override

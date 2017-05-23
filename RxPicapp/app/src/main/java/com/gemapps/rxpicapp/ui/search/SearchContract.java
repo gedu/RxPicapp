@@ -23,6 +23,10 @@ public interface SearchContract {
         void addPictures(List<Picture> pictures);
 
         void showPictureDetail(Intent intent);
+
+        void setupStarUpUI();
+
+        boolean isLoadingMore();
     }
 
     interface Presenter extends BasePresenter {

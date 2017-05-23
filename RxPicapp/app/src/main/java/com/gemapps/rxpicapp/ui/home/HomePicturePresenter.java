@@ -10,7 +10,7 @@ import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.detail.DetailActivity;
 import com.gemapps.rxpicapp.ui.search.SearchActivity;
-import com.gemapps.rxpicapp.util.PicturePager;
+import com.gemapps.rxpicapp.util.pager.PicturePager;
 
 import java.util.List;
 
@@ -56,14 +56,18 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
 
     @Override
     public void onViewCreated(Bundle savedState) {
-        Log.d(TAG, "onViewCreated() called with: savedState = <" + savedState + ">");
         if(savedState == null) load();
-        else if(mView.isLoadingMore()) {
-            Log.d(TAG, "BEFORE pager: "+mPager.getCurrentPage());
-            mPager.goBackPage();
-            Log.d(TAG, "onViewCreated: pager: "+mPager.getCurrentPage());
-            loadPictures();
-        }
+    }
+
+    @Override
+    public void onResume() {
+        if(mView.isLoadingMore()) loadPreviousPictures();
+    }
+
+    private void loadPreviousPictures() {
+        //TODO: should use the subscription to continue listening to the response (?)
+        mPager.goBackPage();
+        loadPictures();
     }
 
     @Override

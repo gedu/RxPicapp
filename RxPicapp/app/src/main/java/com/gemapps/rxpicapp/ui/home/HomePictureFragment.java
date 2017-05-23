@@ -50,6 +50,12 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
     public void onPause() {
         mPresenter.dispose();
         super.onPause();

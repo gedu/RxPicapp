@@ -70,18 +70,7 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupSearchView();
-        setupRecycler();
-        AnimUtil.fadeAnimation(mSearchBackground).start();
-        AnimUtil.fadeAnimation(mSearchView).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mSearchView.requestFocus();
-                ImmUtil.showIme(mSearchView);
-            }
-        }).start();
-        AnimUtil.fadeAnimation(mBackButton).start();
+        view.post(() -> mPresenter.onViewCreated(savedInstanceState));
     }
 
     private void setupRecycler() {
@@ -125,8 +114,7 @@ public class SearchFragment extends PictureLoadMoreListFragment
             @Override
             public boolean onQueryTextSubmit(String query) {
                 showProgressBar();
-                mPresenter.searchFor(query);
-                ImmUtil.hideIme(mSearchView);
+                searchQuery(query);
                 return true;
             }
 
@@ -148,6 +136,11 @@ public class SearchFragment extends PictureLoadMoreListFragment
 
     public void onNewSearch(String query){
         mSearchView.setQuery(query, false);
+        searchQuery(query);
+    }
+
+    private void searchQuery(String query) {
+        mSearchView.clearFocus();
         mPresenter.searchFor(query);
         ImmUtil.hideIme(mSearchView);
     }
@@ -171,6 +164,27 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void showPictureDetail(Intent intent) {
         startActivity(intent);
+    }
+
+    @Override
+    public void setupStarUpUI() {
+        setupSearchView();
+        setupRecycler();
+        AnimUtil.fadeAnimation(mSearchBackground).start();
+        AnimUtil.fadeAnimation(mSearchView).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mSearchView.requestFocus();
+                ImmUtil.showIme(mSearchView);
+            }
+        }).start();
+        AnimUtil.fadeAnimation(mBackButton).start();
+    }
+
+    @Override
+    public boolean isLoadingMore() {
+        return mPictureRecycler.isLoadingMore();
     }
 
     @Override

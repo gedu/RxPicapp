@@ -1,7 +1,7 @@
 package com.gemapps.rxpicapp.ui.home;
 
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
-import com.gemapps.rxpicapp.util.PicturePager;
+import com.gemapps.rxpicapp.util.pager.PicturePager;
 
 import org.junit.Before;
 import org.junit.Test;

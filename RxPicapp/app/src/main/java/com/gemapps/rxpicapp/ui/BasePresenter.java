@@ -10,5 +10,6 @@ public interface BasePresenter {
 
     void load();
     void onViewCreated(Bundle savedState);
+    void onResume();
     void dispose();
 }
