@@ -8,8 +8,10 @@ import android.view.MenuItem;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.data.homesource.HomePictureRepository;
 import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.ui.PresenterSubscriptionStorage;
 import com.gemapps.rxpicapp.ui.detail.DetailActivity;
 import com.gemapps.rxpicapp.ui.search.SearchActivity;
+import com.gemapps.rxpicapp.util.ConnectionUtil;
 import com.gemapps.rxpicapp.util.pager.PicturePager;
 
 import java.util.List;
@@ -65,21 +67,34 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
     }
 
     private void loadPreviousPictures() {
-        //TODO: should use the subscription to continue listening to the response (?)
-        mPager.goBackPage();
         loadPictures();
     }
 
     @Override
     public void loadPictures(){
 
-        ConnectableObservable<List<Picture>> connectible = mRepository.getPictures(mPager.getCurrentPage());
+        if(!hasConnection()) {
+            mView.showConnectionError();
+            return;
+        }
+
+        ConnectableObservable<List<Picture>> connectible = getPicturesObservable();
         mPager.startPagination(connectible);
         mSubscription = connectible
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(listenForPictures());
-
         connectible.connect();
+    }
+
+    private ConnectableObservable<List<Picture>> getPicturesObservable() {
+        ConnectableObservable<List<Picture>> connectible = PresenterSubscriptionStorage
+                .getInstance().getSubscription(HomePicturePresenter.class);
+        if(connectible != null) return connectible;
+
+        connectible = mRepository.getPictures(mPager.getCurrentPage());
+        PresenterSubscriptionStorage.getInstance().saveSubscription(connectible,
+                HomePicturePresenter.class);
+        return connectible;
     }
 
     @Override
@@ -103,17 +118,25 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
         }
     }
 
+    private boolean hasConnection() {
+        return ConnectionUtil.getInstance(mView.getContext()).hasConnection();
+    }
+
     private DisposableObserver<List<Picture>> listenForPictures() {
         return new DisposableObserver<List<Picture>>() {
             @Override
             public void onNext(List<Picture> pictures) {
-                Log.d(TAG, "PRESENTER: ");
+                Log.d(TAG, "PRESENTER: "+pictures.size());
+                PresenterSubscriptionStorage.getInstance().removeSubscription(HomePicturePresenter.class);
                 mView.addPictures(pictures);
                 mView.hideProgress();
+                mView.hideErrorView();
             }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+                mView.showPictureError();
+            }
 
             @Override
             public void onComplete() {}

@@ -4,4 +4,5 @@
     <dimen name="pic_item_height">620dp</dimen>
     <dimen name="big_margin">64dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
+    <dimen name="system_image_height">150dp</dimen>
 </resources>

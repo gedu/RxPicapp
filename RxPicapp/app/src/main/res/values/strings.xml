@@ -7,6 +7,10 @@
     <string name="search_title">Search</string>
     <string name="search_hint"><![CDATA[Photos & more]]></string>
     <string name="no_comment_text">No comments</string>
+    <string name="connection_error_message">Failed to connect with the cloud</string>
+    <string name="try_again">Try again</string>
+    <string name="picture_error_message">Couldn\'t load pictures</string>
+    <string name="load_more_error">Failed to load more pictures</string>
 
     <plurals name="comments">
         <item quantity="zero">No Comments</item>

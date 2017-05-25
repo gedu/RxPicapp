@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
 import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.ui.PresenterSubscriptionStorage;
 import com.gemapps.rxpicapp.ui.detail.DetailActivity;
 import com.gemapps.rxpicapp.util.pager.PicturePager;
 
@@ -62,9 +63,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     }
 
     private void loadPreviousPictures() {
-        Log.d(TAG, "BEFORE pager: "+mPager.getCurrentPage());
-        mPager.goBackPage();
-        Log.d(TAG, "onViewCreated: pager: "+mPager.getCurrentPage());
         loadMore();
     }
 
@@ -87,32 +85,43 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void searchFor(String query) {
         mCurrentQuery = query;
-        clearSubscription();
-        ConnectableObservable<List<Picture>> connectible = mRepository
-                .getPicturesFromQuery(mPager.getCurrentPage(), mCurrentQuery);
+
+        ConnectableObservable<List<Picture>> connectible = getPicturesObservable();
         mPager.startPagination(connectible);
         mSubscriber = connectible
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Picture>>(){
-
-                    @Override
-                    public void onNext(List<Picture> pictures) {
-                        Log.d(TAG, "onNext() called with: pictures = <" + pictures.size() + ">");
-                        mView.hideProgressBar();
-                        mView.addPictures(pictures);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                .subscribeWith(listenForPictures());
         connectible.connect();
+    }
+
+    private DisposableObserver<List<Picture>> listenForPictures() {
+        return new DisposableObserver<List<Picture>>(){
+
+            @Override
+            public void onNext(List<Picture> pictures) {
+                Log.d(TAG, "onNext() called with: pictures = <" + pictures.size() + ">");
+                PresenterSubscriptionStorage.getInstance().removeSubscription(SearchPresenter.class);
+                mView.hideProgressBar();
+                mView.addPictures(pictures);
+            }
+
+            @Override
+            public void onError(Throwable e) {}
+
+            @Override
+            public void onComplete() {}
+        };
+    }
+
+    private ConnectableObservable<List<Picture>> getPicturesObservable() {
+        ConnectableObservable<List<Picture>> connectible = PresenterSubscriptionStorage
+                .getInstance().getSubscription(SearchPresenter.class);
+        if(connectible != null) return connectible;
+
+        connectible = mRepository.getPicturesFromQuery(mPager.getCurrentPage(), mCurrentQuery);
+        PresenterSubscriptionStorage.getInstance().saveSubscription(connectible,
+                SearchPresenter.class);
+        return connectible;
     }
 
     private void clearSubscription() {

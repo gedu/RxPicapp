@@ -14,8 +14,11 @@ import android.widget.Toast;
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
+import com.gemapps.rxpicapp.ui.widget.ErrorFullView;
 
 import java.util.List;
+
+import butterknife.BindView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +27,8 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
         implements HomePictureContract.View {
 
     private static final String TAG = "HomePictureFragment";
+    @BindView(R.id.error_view)
+    ErrorFullView mErrorView;
 
     private HomePictureContract.Presenter mPresenter;
 
@@ -69,7 +74,7 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
 
     @Override
     protected void onLoadMoreError() {
-        Toast.makeText(getActivity(), "Failed to loaind more", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.load_more_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -85,7 +90,6 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         return mPresenter.optionSelected(item) || super.onOptionsItemSelected(item);
     }
 
@@ -137,5 +141,28 @@ public class HomePictureFragment extends PictureLoadMoreListFragment
     @Override
     public void startSearch(Intent intent) {
         startActivity(intent);
+    }
+
+    @Override
+    public void showPictureError() {
+        showErrorView(R.drawable.ic_sad_cloud,
+                R.string.picture_error_message);
+    }
+
+    @Override
+    public void showConnectionError() {
+        showErrorView(R.drawable.ic_error_cloud,
+                R.string.connection_error_message);
+    }
+
+    @Override
+    public void hideErrorView() {
+        mErrorView.setVisibility(View.GONE);
+    }
+
+    private void showErrorView(int iconDrawable, int message) {
+        mErrorView.setErrorIcon(iconDrawable);
+        mErrorView.setErrorMessage(message);
+        mErrorView.setVisibility(View.VISIBLE);
     }
 }

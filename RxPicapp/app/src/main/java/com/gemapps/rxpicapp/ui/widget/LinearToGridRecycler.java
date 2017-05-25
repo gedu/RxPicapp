@@ -18,14 +18,13 @@ import java.util.List;
 
 import butterknife.BindInt;
 import butterknife.ButterKnife;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 /**
  * Created by edu on 5/11/17.
  */
-
+@SuppressWarnings("unchecked")
 public class LinearToGridRecycler extends RecyclerView {
 
     private static final String TAG = "LinearToGridRecycler";
@@ -35,8 +34,7 @@ public class LinearToGridRecycler extends RecyclerView {
     private BaseRecyclerViewAdapter mAdapter;
     private boolean mIsLoadingMore = false;
     private boolean mIsLinearLayout = true;
-    private Observable<Object> mLoadMore;
-    private ObservableEmitter<Object> mLoadMoreEmitter;
+    private Subject<Boolean> mLoadMore;
 
     @BindInt(R.integer.grid_column_count) int COLUMN_COUNT;
 
@@ -55,10 +53,7 @@ public class LinearToGridRecycler extends RecyclerView {
         setupLayoutManagers(context);
         setLayoutManager();
         addOnScrollListener(SCROLL_BOTTOM_LISTENER);
-        mLoadMore = Observable.create(e -> {
-            Log.d(TAG, "init: COMPLETABLE");
-            mLoadMoreEmitter = e;
-        }).observeOn(AndroidSchedulers.mainThread());
+        mLoadMore = PublishSubject.create();
     }
 
     private void setupLayoutManagers(Context context) {
@@ -88,7 +83,7 @@ public class LinearToGridRecycler extends RecyclerView {
         return mIsLinearLayout;
     }
 
-    public Observable<Object> getLoadingMoreObserver() {
+    public Subject<Boolean> getLoadingMoreObserver() {
         return mLoadMore;
     }
 
@@ -100,7 +95,6 @@ public class LinearToGridRecycler extends RecyclerView {
     }
 
     public boolean isLoadingMore() {
-        Log.d(TAG, "Asking for is loading more: "+mIsLoadingMore);
         return mIsLoadingMore;
     }
 
@@ -126,13 +120,18 @@ public class LinearToGridRecycler extends RecyclerView {
         }
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        mLoadMore.onComplete();
+        super.onDetachedFromWindow();
+    }
+
     private void restoreItems(RecyclerSavedState savedState) {
         mAdapter.addItems(savedState.currentPictures);
     }
 
     private void restoreLoading(RecyclerSavedState savedState) {
         mIsLoadingMore = savedState.isLoading;
-        Log.d(TAG, "restore loading more data: "+mIsLoadingMore);
     }
 
     private void restoreLayout(RecyclerSavedState savedState) {
@@ -157,11 +156,9 @@ public class LinearToGridRecycler extends RecyclerView {
                 //note: +3 how many of mItems to have below the current scroll position before loading more
                 if (!mIsLoadingMore && totalItems <= (lastVisibleItem + 3)) {
 
-
-//                    mHandler.post(mAddProgressRunnable);
-                    if(mLoadMoreEmitter != null){
+                    if(mLoadMore != null){
                         mIsLoadingMore = true;
-                        mLoadMoreEmitter.onNext(new Object());
+                        mLoadMore.onNext(true);
                     }else {
                         Log.d(TAG, "null");
                     }
@@ -197,20 +194,20 @@ public class LinearToGridRecycler extends RecyclerView {
         }
     };
 
-    public static class RecyclerSavedState extends BaseSavedState {
+    private static class RecyclerSavedState extends BaseSavedState {
 
         List<Picture> currentPictures;
         boolean isLoading;
         boolean isLinear;
 
-        public RecyclerSavedState(Parcel source) {
+        RecyclerSavedState(Parcel source) {
             super(source);
             source.readTypedList(currentPictures, Picture.CREATOR);
             isLoading = source.readInt() == 1;
             isLinear = source.readInt() == 1;
         }
 
-        public RecyclerSavedState(Parcelable superState) {
+        RecyclerSavedState(Parcelable superState) {
             super(superState);
         }
 

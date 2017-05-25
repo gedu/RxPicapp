@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ErrorFullView">
+        <attr name="message" format="string|reference"/>
+        <attr name="imageSrc" format="integer|reference"/>
+    </declare-styleable>
+</resources>

@@ -1,11 +1,10 @@
 package com.gemapps.rxpicapp.ui.home;
 
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 
-import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.model.Picture;
+import com.gemapps.rxpicapp.ui.BaseContractView;
 import com.gemapps.rxpicapp.ui.BasePresenter;
 
 import java.util.List;
@@ -17,10 +16,6 @@ import java.util.List;
 public interface HomePictureContract {
 
     interface View extends BaseContractView<Presenter> {
-
-        static Fragment newInstance(){
-            return null;
-        }
 
         void showProgressBar();
 
@@ -37,6 +32,12 @@ public interface HomePictureContract {
         boolean isLinearLayout();
 
         void startSearch(Intent intent);
+
+        void showPictureError();
+
+        void showConnectionError();
+
+        void hideErrorView();
     }
 
     interface Presenter extends BasePresenter {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -53,20 +54,18 @@ public abstract class PictureLoadMoreListFragment extends ButterFragment {
         mAdapter = new HomePictureViewAdapter(getActivity(), new ArrayList<>(), mListener);
         mPictureRecycler.addAdapter(mAdapter);
         mPictureRecycler.getLoadingMoreObserver()
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onLoadMoreSubscriber());
     }
 
     private DisposableObserver<Object> onLoadMoreSubscriber() {
         return new DisposableObserver<Object>() {
-
             @Override
             public void onNext(Object value) {
                 onLoadMore();
             }
-
             @Override
             public void onComplete() {}
-
             @Override
             public void onError(Throwable e) {
                 onLoadMoreError();

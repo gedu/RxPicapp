@@ -73,6 +73,22 @@ public class SearchFragment extends PictureLoadMoreListFragment
         view.post(() -> mPresenter.onViewCreated(savedInstanceState));
     }
 
+    @Override
+    public void setupStarUpUI() {
+        setupSearchView();
+        setupRecycler();
+        AnimUtil.fadeAnimation(mSearchBackground).start();
+        AnimUtil.fadeAnimation(mSearchView).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mSearchView.requestFocus();
+                ImmUtil.showIme(mSearchView);
+            }
+        }).start();
+        AnimUtil.fadeAnimation(mBackButton).start();
+    }
+
     private void setupRecycler() {
         if(!mIsLinear) mPictureRecycler.swapListStyle();
     }
@@ -80,12 +96,6 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void setPresenter(SearchContract.Presenter presenter) {
         mPresenter = presenter;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mPresenter.load();
     }
 
     @Override
@@ -164,22 +174,6 @@ public class SearchFragment extends PictureLoadMoreListFragment
     @Override
     public void showPictureDetail(Intent intent) {
         startActivity(intent);
-    }
-
-    @Override
-    public void setupStarUpUI() {
-        setupSearchView();
-        setupRecycler();
-        AnimUtil.fadeAnimation(mSearchBackground).start();
-        AnimUtil.fadeAnimation(mSearchView).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mSearchView.requestFocus();
-                ImmUtil.showIme(mSearchView);
-            }
-        }).start();
-        AnimUtil.fadeAnimation(mBackButton).start();
     }
 
     @Override
