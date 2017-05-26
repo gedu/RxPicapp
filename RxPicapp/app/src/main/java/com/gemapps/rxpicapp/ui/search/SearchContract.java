@@ -27,6 +27,10 @@ public interface SearchContract {
         void setupStarUpUI();
 
         boolean isLoadingMore();
+
+        void showConnectionError();
+
+        void hideErrorView();
     }
 
     interface Presenter extends BasePresenter {

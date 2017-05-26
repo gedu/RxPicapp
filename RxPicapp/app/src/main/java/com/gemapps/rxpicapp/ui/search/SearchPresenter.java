@@ -8,6 +8,7 @@ import com.gemapps.rxpicapp.data.searchsource.SearchRepository;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.PresenterSubscriptionStorage;
 import com.gemapps.rxpicapp.ui.detail.DetailActivity;
+import com.gemapps.rxpicapp.util.ConnectionUtil;
 import com.gemapps.rxpicapp.util.pager.PicturePager;
 
 import java.util.List;
@@ -49,8 +50,18 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void onViewCreated(Bundle savedState) {
 
+        if(!hasConnection()) {
+            mView.hideProgressBar();
+            mView.showConnectionError();
+            return;
+        }
+
         if(savedState == null) mView.setupStarUpUI();
         else loadMoreIfNeeded();
+    }
+
+    private boolean hasConnection() {
+        return ConnectionUtil.getInstance(mView.getContext()).hasConnection();
     }
 
     @Override
@@ -99,14 +110,18 @@ public class SearchPresenter implements SearchContract.Presenter {
 
             @Override
             public void onNext(List<Picture> pictures) {
+                //Todo: show empty query
                 Log.d(TAG, "onNext() called with: pictures = <" + pictures.size() + ">");
                 PresenterSubscriptionStorage.getInstance().removeSubscription(SearchPresenter.class);
                 mView.hideProgressBar();
                 mView.addPictures(pictures);
+                mView.hideErrorView();
             }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onError(Throwable e) {
+                //TODO: show error
+            }
 
             @Override
             public void onComplete() {}

@@ -58,25 +58,21 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
 
     @Override
     public void onViewCreated(Bundle savedState) {
+        if(!hasConnection()) {
+            mView.hideProgress();
+            mView.showConnectionError();
+            return;
+        }
         if(savedState == null) load();
     }
 
     @Override
     public void onResume() {
-        if(mView.isLoadingMore()) loadPreviousPictures();
-    }
-
-    private void loadPreviousPictures() {
-        loadPictures();
+        if(mView.isLoadingMore()) loadPictures();
     }
 
     @Override
-    public void loadPictures(){
-
-        if(!hasConnection()) {
-            mView.showConnectionError();
-            return;
-        }
+    public void loadPictures() {
 
         ConnectableObservable<List<Picture>> connectible = getPicturesObservable();
         mPager.startPagination(connectible);

@@ -11,6 +11,7 @@
     <string name="try_again">Try again</string>
     <string name="picture_error_message">Couldn\'t load pictures</string>
     <string name="load_more_error">Failed to load more pictures</string>
+    <string name="back">Back</string>
 
     <plurals name="comments">
         <item quantity="zero">No Comments</item>

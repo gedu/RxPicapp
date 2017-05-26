@@ -14,10 +14,12 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.gemapps.rxpicapp.R;
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.ui.butter.PictureLoadMoreListFragment;
+import com.gemapps.rxpicapp.ui.widget.ErrorFullView;
 import com.gemapps.rxpicapp.util.AnimUtil;
 import com.gemapps.rxpicapp.util.ImmUtil;
 
@@ -43,6 +45,8 @@ public class SearchFragment extends PictureLoadMoreListFragment
     ImageButton mBackButton;
     @BindView(R.id.search_view)
     SearchView mSearchView;
+    @BindView(R.id.connection_error_view)
+    ErrorFullView mConnectionErrorView;
 
     private boolean mIsLinear;
     private SearchContract.Presenter mPresenter;
@@ -182,6 +186,16 @@ public class SearchFragment extends PictureLoadMoreListFragment
     }
 
     @Override
+    public void showConnectionError() {
+        mConnectionErrorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideErrorView() {
+        mConnectionErrorView.setVisibility(View.GONE);
+    }
+
+    @Override
     protected int getLayoutResource() {
         return R.layout.fragment_search;
     }
@@ -194,7 +208,10 @@ public class SearchFragment extends PictureLoadMoreListFragment
 
     @Override
     protected void onLoadMoreError() {
-
+        Toast.makeText(getActivity().getApplicationContext(),
+                R.string.load_more_error,
+                Toast.LENGTH_SHORT)
+                .show();
     }
 
     @Override

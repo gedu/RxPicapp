@@ -8,6 +8,8 @@ import android.support.annotation.StringRes;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +35,9 @@ public class ErrorFullView extends ConstraintLayout {
     @BindView(R.id.error_message)
     TextView mErrorMessage;
 
+    @BindView(R.id.try_again_button)
+    Button mTryAgainButton;
+
     private Subject<Boolean> mOnClick;
 
     public ErrorFullView(Context context, AttributeSet attrs) {
@@ -52,15 +57,22 @@ public class ErrorFullView extends ConstraintLayout {
                 R.styleable.ErrorFullView, defStyleAttr, 0);
 
         String message = "";
+        int messageColor;
         Drawable errorIcon;
+        boolean hideButton;
 
         try {
             message = typedArray.getString(R.styleable.ErrorFullView_message);
+            messageColor = typedArray.getColor(R.styleable.ErrorFullView_messageColor,
+                    getResources().getColor(android.R.color.black));
             errorIcon = typedArray.getDrawable(R.styleable.ErrorFullView_imageSrc);
+            hideButton = typedArray.getBoolean(R.styleable.ErrorFullView_hideButton, false);
         } finally {
             typedArray.recycle();
         }
 
+        mTryAgainButton.setVisibility(hideButton ? View.GONE : View.VISIBLE);
+        mErrorMessage.setTextColor(messageColor);
         if(isInEditMode() && mErrorMessage == null) return;
 
         mOnClick = PublishSubject.create();

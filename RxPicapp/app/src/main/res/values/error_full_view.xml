@@ -2,6 +2,8 @@
 <resources>
     <declare-styleable name="ErrorFullView">
         <attr name="message" format="string|reference"/>
+        <attr name="messageColor" format="integer|reference"/>
         <attr name="imageSrc" format="integer|reference"/>
+        <attr name="hideButton" format="boolean|reference"/>
     </declare-styleable>
 </resources>

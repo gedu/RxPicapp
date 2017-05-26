@@ -1,5 +1,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0"
-            android:background="@color/colorPrimaryDark" />
+            android:background="@color/colorPrimaryDark"/>
 
         <android.support.v7.widget.SearchView
             android:id="@+id/search_view"
@@ -30,19 +31,20 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="32dp"
-            android:focusable="false"
             android:alpha="0"
+            android:focusable="false"
             android:iconifiedByDefault="false"/>
 
         <ImageButton
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
             android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/back"
             android:gravity="start|center_vertical"
-            android:src="@drawable/ic_back_white_24px"/>
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            app:srcCompat="@drawable/ic_back_white_24px"/>
 
 
     </FrameLayout>
@@ -51,9 +53,21 @@
         android:id="@+id/results_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
         android:layout_marginTop="?attr/actionBarSize"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        android:background="@color/colorPrimaryDark">
+
+        <com.gemapps.rxpicapp.ui.widget.ErrorFullView
+            android:id="@+id/connection_error_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:hideButton="true"
+            app:imageSrc="@drawable/ic_error_cloud_white"
+            app:messageColor="@android:color/white"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -61,9 +75,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="64dp"
-            android:paddingBottom="64dp"
             android:indeterminate="true"
+            android:paddingBottom="64dp"
+            android:paddingTop="64dp"
             android:visibility="gone"/>
 
         <com.gemapps.rxpicapp.ui.widget.LinearToGridRecycler
