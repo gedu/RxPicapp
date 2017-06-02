@@ -50,14 +50,19 @@ public class SearchPresenter implements SearchContract.Presenter {
     @Override
     public void onViewCreated(Bundle savedState) {
 
+
+
+        if(savedState == null) {
+            mView.setupStarUpUI();
+            checkConnection();
+        } else loadMoreIfNeeded();
+    }
+
+    private void checkConnection() {
         if(!hasConnection()) {
             mView.hideProgressBar();
             mView.showConnectionError();
-            return;
         }
-
-        if(savedState == null) mView.setupStarUpUI();
-        else loadMoreIfNeeded();
     }
 
     private boolean hasConnection() {
