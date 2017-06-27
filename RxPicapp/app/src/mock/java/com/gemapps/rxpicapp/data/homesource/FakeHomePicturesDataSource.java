@@ -1,5 +1,7 @@
 package com.gemapps.rxpicapp.data.homesource;
 
+import android.util.Log;
+
 import com.gemapps.rxpicapp.model.Picture;
 import com.gemapps.rxpicapp.networking.deserializer.PictureDeserializer;
 import com.gemapps.rxpicapp.util.JsonUtil;
@@ -26,10 +28,10 @@ public class FakeHomePicturesDataSource implements HomePictureDataSource {
 
     @Override
     public ConnectableObservable<List<Picture>> getPictures(int page) {
+        System.out.println("GET PICTURE");
         return Observable.fromCallable(readPictures())
                 .subscribeOn(Schedulers.io())
                 .map(getPicturesFromResult())
-                .observeOn(AndroidSchedulers.mainThread())
                 .share().replay();
     }
 

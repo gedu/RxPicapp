@@ -13,6 +13,11 @@
              Extend the material dark Action Bar overlay as this contains text styling. -->
     </style>
 
+    <style name="MarginPoint">
+        <item name="android:width">@dimen/match_parent</item>
+        <item name="android:height">@dimen/match_parent</item>
+    </style>
+
     <style name="SearchWindowAnimations">
         <item name="android:windowEnterAnimation">@null</item>
         <item name="android:windowExitAnimation">@anim/fade_out_rapidly</item>

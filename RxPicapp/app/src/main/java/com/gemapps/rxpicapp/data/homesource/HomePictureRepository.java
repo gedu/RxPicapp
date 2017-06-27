@@ -1,5 +1,7 @@
 package com.gemapps.rxpicapp.data.homesource;
 
+import android.support.annotation.VisibleForTesting;
+
 import com.gemapps.rxpicapp.model.Picture;
 
 import java.util.List;
@@ -16,6 +18,11 @@ public class HomePictureRepository implements HomePictureDataSource {
     private HomePictureDataSource mRemoteDataSource;
 
     public HomePictureRepository(HomePictureDataSource remoteDataSource) {
+        mRemoteDataSource = remoteDataSource;
+    }
+
+    @VisibleForTesting
+    public void setRemoteDataSource(HomePictureDataSource remoteDataSource) {
         mRemoteDataSource = remoteDataSource;
     }
 

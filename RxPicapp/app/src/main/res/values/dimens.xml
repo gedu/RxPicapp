@@ -5,4 +5,7 @@
     <dimen name="big_margin">64dp</dimen>
     <dimen name="medium_margin">16dp</dimen>
     <dimen name="system_image_height">150dp</dimen>
+    
+    <item name="match_parent" format="integer" type="dimen">-1</item>
+    <item name="wrap_content" format="integer" type="dimen">-2</item>
 </resources>

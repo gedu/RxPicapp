@@ -4,7 +4,9 @@ import android.util.LruCache;
 
 import com.gemapps.rxpicapp.model.Picture;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.observables.ConnectableObservable;
 
@@ -14,7 +16,7 @@ import io.reactivex.observables.ConnectableObservable;
  */
 public class PresenterSubscriptionStorage {
 
-    private LruCache<Class<?>, ConnectableObservable<List<Picture>>> mSubscriptions;
+    private Map<Class<?>, ConnectableObservable<List<Picture>>> mSubscriptions;
 
     private static final PresenterSubscriptionStorage sInstance = new PresenterSubscriptionStorage();
 
@@ -23,7 +25,7 @@ public class PresenterSubscriptionStorage {
     }
 
     private PresenterSubscriptionStorage() {
-        mSubscriptions = new LruCache<>(3);
+        mSubscriptions = new HashMap<>(3);
     }
 
     public void saveSubscription(ConnectableObservable<List<Picture>> observable, Class<?> clazz) {

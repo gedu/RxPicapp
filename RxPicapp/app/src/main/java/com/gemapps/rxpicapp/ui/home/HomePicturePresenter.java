@@ -20,6 +20,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observables.ConnectableObservable;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by edu on 4/12/17.
@@ -79,6 +80,7 @@ public class HomePicturePresenter implements HomePictureContract.Presenter {
         mSubscription = connectible
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(listenForPictures());
+
         connectible.connect();
     }
 

@@ -3,6 +3,7 @@ package com.gemapps.rxpicapp.networking;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.gemapps.rxpicapp.data.detailsource.DetailDataSource;
 import com.gemapps.rxpicapp.data.detailsource.DetailRemoteDataSource;
+import com.gemapps.rxpicapp.data.homesource.FakeHomePicturesDataSource;
 import com.gemapps.rxpicapp.data.homesource.HomePictureDataSource;
 import com.gemapps.rxpicapp.data.homesource.HomePictureRemoteDataSource;
 import com.gemapps.rxpicapp.data.searchsource.SearchDataSource;
@@ -21,7 +22,7 @@ import static com.gemapps.rxpicapp.networking.rest.FlickrBase.FLICKR_URL;
 public class NetInjector {
 
     public static HomePictureDataSource getHomePictureRequester() {
-        return new HomePictureRemoteDataSource();
+        return new FakeHomePicturesDataSource();
     }
 
     public static SearchDataSource getSearchRequester() {
